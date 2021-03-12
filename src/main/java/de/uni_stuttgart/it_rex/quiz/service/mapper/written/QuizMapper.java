@@ -14,18 +14,4 @@ import org.mapstruct.*;
  */
 @Mapper(componentModel = "spring", uses = {})
 public interface QuizMapper extends EntityMapper<QuizDTO, Quiz> {
-
-    // default UUID idToId(String id) {
-    //     if (id == null) {
-    //         return null;
-    //     }
-    //     return UUID.fromString(id);
-    // }
-
-    // default String idToId(UUID id) {
-    //     if (id == null) {
-    //         return null;
-    //     }
-    //     return id.toString();
-    // }
 }

@@ -58,4 +58,27 @@ public class QuizDTO implements Serializable {
     public void setQuestions(List<QuestionDTO> questions) {
         this.questions = questions;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        QuizDTO quizDTO = (QuizDTO) o;
+        return Objects.equals(getId(), quizDTO.getId()) && Objects.equals(getName(), quizDTO.getName()) && Objects.equals(getCourseId(), quizDTO.getCourseId()) && Objects.equals(getQuestions(), quizDTO.getQuestions());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getName(), getCourseId(), getQuestions());
+    }
+
+    @Override
+    public String toString() {
+        return "QuizDTO{" +
+            "id=" + id +
+            ", name='" + name + '\'' +
+            ", courseId=" + courseId +
+            ", questions=" + questions +
+            '}';
+    }
 }

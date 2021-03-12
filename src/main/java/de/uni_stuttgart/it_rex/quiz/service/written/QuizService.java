@@ -66,7 +66,6 @@ public class QuizService {
      */
     public Optional<QuizDTO> findOne(final UUID id) {
         log.debug("Request to get Quiz : {}", id);
-        // return quizRepository.findById(quizMapper.idToId(id)).map(quizMapper::toDto);
         return quizRepository.findById(id).map(quizMapper::toDto);
     }
 

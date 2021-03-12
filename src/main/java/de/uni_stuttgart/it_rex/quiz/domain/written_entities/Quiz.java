@@ -13,7 +13,7 @@ import java.util.UUID;
 /**
  * A Quiz.
  */
-@Document(collection = "quiz")
+@Document(collection = "quizzes")
 public class Quiz implements Serializable {
 
     private static final long serialVersionUID = 1L;
