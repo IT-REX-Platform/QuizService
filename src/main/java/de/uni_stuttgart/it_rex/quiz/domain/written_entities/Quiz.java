@@ -21,14 +21,15 @@ public class Quiz implements Serializable {
     private UUID id;
 
     @Field
-    private String name;
+    private UUID courseId;
 
     @Field
-    private UUID courseId;
+    private String name;
+
 
     @DBRef(lazy = true)
     @Field
-    private Set<Question> questions;
+    private Set<Question> questions = new HashSet<>();
 
     public boolean isNew() {
         return (getId() == null);
@@ -42,20 +43,20 @@ public class Quiz implements Serializable {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public UUID getCourseId() {
         return courseId;
     }
 
     public void setCourseId(UUID courseId) {
         this.courseId = courseId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Set<Question> getQuestions() {

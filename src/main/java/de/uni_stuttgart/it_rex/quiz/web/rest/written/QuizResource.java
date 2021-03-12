@@ -116,6 +116,17 @@ public class QuizResource {
     }
 
     /**
+     * {@code GET  /quizzes} : get all the quizzes.
+     *
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of quizzes in body.
+     */
+    @GetMapping(value="/quizzes", params="course_id")
+    public List<QuizDTO> getCourseQuizzes(@RequestParam("course_id") final UUID courseId) {
+        log.debug("REST request to get all Quizzes");
+        return quizService.findAll(courseId);
+    }
+
+    /**
      * {@code GET  /quizzes/:id} : get the "id" quiz.
      *
      * @param id the id of the QuizDTO to retrieve.
@@ -135,7 +146,8 @@ public class QuizResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/quizzes/{id}")
-    public ResponseEntity<Void> deletequiz(@PathVariable final UUID id) {
+    public ResponseEntity<Void> deleteQuiz(@PathVariable final UUID id,
+            @RequestParam("with_questions") final Optional<Boolean> withQuestions) {
         log.debug("REST request to delete quiz : {}", id);
         quizService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();

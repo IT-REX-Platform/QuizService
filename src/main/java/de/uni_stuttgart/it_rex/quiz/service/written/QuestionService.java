@@ -57,6 +57,17 @@ public class QuestionService {
             .collect(Collectors.toCollection(LinkedList::new));
     }
 
+    /**
+     * Get all the QuestionS.
+     *
+     * @return the list of entities.
+     */
+    public List<QuestionDTO> findAll(final UUID courseId) {
+        log.debug("Request to get all QuestionS");
+        return questionRepository.findByCourseId(courseId).stream()
+            .map(questionMapper::toDto)
+            .collect(Collectors.toCollection(LinkedList::new));
+    }
 
     /**
      * Get one Question by id.

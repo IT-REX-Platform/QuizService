@@ -116,6 +116,17 @@ public class QuestionResource {
     }
 
     /**
+     * {@code GET  /questions} : get all the questions.
+     *
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of questions in body.
+     */
+    @GetMapping(value="/questions", params="course_id")
+    public List<QuestionDTO> getCourseQuestions(@RequestParam("course_id") final UUID courseId) {
+        log.debug("REST request to get all questions");
+        return questionService.findAll(courseId);
+    }
+
+    /**
      * {@code GET  /questions/:id} : get the "id" question.
      *
      * @param id the id of the QuestionDTO to retrieve.

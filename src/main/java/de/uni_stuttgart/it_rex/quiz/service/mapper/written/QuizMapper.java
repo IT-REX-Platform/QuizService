@@ -12,6 +12,9 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link Quiz} and its DTO {@link QuizDTO}.
  */
-@Mapper(componentModel = "spring", uses = {})
+@Mapper(componentModel = "spring", uses = {QuestionMapper.class})
 public interface QuizMapper extends EntityMapper<QuizDTO, Quiz> {
+
+    @Mapping(target = "removeQuestion", ignore = true)
+    Quiz toEntity(QuizDTO dto);
 }

@@ -24,6 +24,9 @@ public class Question implements Serializable {
     private UUID id;
 
     @Field
+    private UUID courseId;
+
+    @Field
     private QUESTIONTYPE type;
 
     @Field
@@ -37,7 +40,7 @@ public class Question implements Serializable {
 
     @DBRef(lazy = true)
     @Field
-    private Set<Quiz> quizzes;
+    private Set<Quiz> quizzes = new HashSet<>();
 
     public boolean isNew() {
         return (getId() == null);
@@ -49,6 +52,14 @@ public class Question implements Serializable {
 
     public void setId(UUID id) {
         this.id = id;
+    }
+
+    public UUID getCourseId() {
+        return courseId;
+    }
+
+    public void setCourseId(UUID courseId) {
+        this.courseId = courseId;
     }
 
     public QUESTIONTYPE getType() {
