@@ -5,6 +5,8 @@ import de.uni_stuttgart.it_rex.quiz.domain.written_entities.Quiz;
 import de.uni_stuttgart.it_rex.quiz.service.dto.written_dtos.QuizDTO;
 import de.uni_stuttgart.it_rex.quiz.service.mapper.EntityMapper;
 
+import java.util.UUID;
+
 import org.mapstruct.*;
 
 /**
@@ -13,12 +15,17 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring", uses = {})
 public interface QuizMapper extends EntityMapper<QuizDTO, Quiz> {
 
-    default Quiz fromId(String id) {
-        if (id == null) {
-            return null;
-        }
-        Quiz quiz = new Quiz();
-        quiz.setId(id);
-        return quiz;
-    }
+    // default UUID idToId(String id) {
+    //     if (id == null) {
+    //         return null;
+    //     }
+    //     return UUID.fromString(id);
+    // }
+
+    // default String idToId(UUID id) {
+    //     if (id == null) {
+    //         return null;
+    //     }
+    //     return id.toString();
+    // }
 }

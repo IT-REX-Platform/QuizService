@@ -19,7 +19,7 @@ public class Quiz implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    private String id;
+    private UUID id;
 
     @Field("content")
     private String content;
@@ -28,12 +28,16 @@ public class Quiz implements Serializable {
     // @Field("b")
     // private Set<EntityB> bs = new HashSet<>();
 
-    public String getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(UUID id) {
         this.id = id;
+    }
+
+    public boolean isNew() {
+        return (getId() == null);
     }
 
     public String getContent() {

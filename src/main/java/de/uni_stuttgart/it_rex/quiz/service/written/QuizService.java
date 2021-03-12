@@ -1,7 +1,7 @@
 package de.uni_stuttgart.it_rex.quiz.service.written;
 
 import de.uni_stuttgart.it_rex.quiz.domain.written_entities.Quiz;
-import de.uni_stuttgart.it_rex.quiz.repository.QuizRepository;
+import de.uni_stuttgart.it_rex.quiz.repository.written.QuizRepository;
 import de.uni_stuttgart.it_rex.quiz.service.dto.written_dtos.QuizDTO;
 import de.uni_stuttgart.it_rex.quiz.service.mapper.written.QuizMapper;
 import org.slf4j.Logger;
@@ -66,8 +66,8 @@ public class QuizService {
      */
     public Optional<QuizDTO> findOne(final UUID id) {
         log.debug("Request to get Quiz : {}", id);
-        return quizRepository.findById(id.toString())
-            .map(quizMapper::toDto);
+        // return quizRepository.findById(quizMapper.idToId(id)).map(quizMapper::toDto);
+        return quizRepository.findById(id).map(quizMapper::toDto);
     }
 
     /**
@@ -77,6 +77,6 @@ public class QuizService {
      */
     public void delete(final UUID id) {
         log.debug("Request to delete Quiz : {}", id);
-        quizRepository.deleteById(id.toString());
+        quizRepository.deleteById(id);
     }
 }

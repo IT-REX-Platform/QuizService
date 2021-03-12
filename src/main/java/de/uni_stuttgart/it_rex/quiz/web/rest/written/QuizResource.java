@@ -65,7 +65,7 @@ public class QuizResource {
     }
 
     /**
-     * {@code POST  /quizzes} : Create a new entityA.
+     * {@code POST  /quizzes} : Create a new Quiz.
      *
      * @param QuizDTO the quizDTO to create.
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new QuizDTO, or with status {@code 400 (Bad Request)} if the entityA has already an ID.
@@ -73,7 +73,7 @@ public class QuizResource {
      */
     @PostMapping("/quizzes")
     public ResponseEntity<QuizDTO> createQuiz(@RequestBody QuizDTO quizDTO) throws URISyntaxException {
-        log.debug("REST request to save EntityA : {}", quizDTO);
+        log.debug("REST request to save Quiz : {}", quizDTO);
         if (quizDTO.getId() != null) {
             throw new BadRequestAlertException("A new quizDTO cannot already have an ID", ENTITY_NAME, "id exists");
         }
@@ -84,7 +84,7 @@ public class QuizResource {
     }
 
     /**
-     * {@code PUT  /quizzes} : Updates an existing entityA.
+     * {@code PUT  /quizzes} : Updates an existing Quiz.
      *
      * @param QuizDTO the QuizDTO to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated QuizDTO,
