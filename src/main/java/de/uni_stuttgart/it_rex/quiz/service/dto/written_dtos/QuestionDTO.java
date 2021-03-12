@@ -1,6 +1,9 @@
 package de.uni_stuttgart.it_rex.quiz.service.dto.written_dtos;
 
+import de.uni_stuttgart.it_rex.quiz.domain.enumeration.QUESTIONTYPE;
+
 import java.io.Serializable;
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -15,7 +18,13 @@ public class QuestionDTO implements Serializable {
    */
   private UUID courseId;
 
+  private QUESTIONTYPE type;
+
   private String question;
+
+  private Map<String, String> choices;
+
+  private String solution;
 
     public UUID getId() {
         return id;
@@ -33,6 +42,14 @@ public class QuestionDTO implements Serializable {
         this.courseId = courseId;
     }
 
+    public QUESTIONTYPE getType() {
+        return type;
+    }
+
+    public void setType(QUESTIONTYPE type) {
+        this.type = type;
+    }
+
     public String getQuestion() {
         return question;
     }
@@ -41,18 +58,35 @@ public class QuestionDTO implements Serializable {
         this.question = question;
     }
 
+    public Map<String, String> getChoices() {
+        return choices;
+    }
+
+    public void setChoices(Map<String, String> choices) {
+        this.choices = choices;
+    }
+
+    public String getSolution() {
+        return solution;
+    }
+
+    public void setSolution(String solution) {
+        this.solution = solution;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         QuestionDTO that = (QuestionDTO) o;
         return Objects.equals(getId(), that.getId()) && Objects.equals(getCourseId(), that.getCourseId())
-            && Objects.equals(getQuestion(), that.getQuestion());
-      }
+                && getType() == that.getType() && Objects.equals(getQuestion(), that.getQuestion())
+                && Objects.equals(getChoices(), that.getChoices()) && Objects.equals(getSolution(), that.getSolution());
+    }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getCourseId(), getQuestion());
+        return Objects.hash(getId(), getCourseId(), getType(), getQuestion(), getChoices(), getSolution());
     }
 
     @Override
@@ -60,7 +94,10 @@ public class QuestionDTO implements Serializable {
         return "QuestionDTO{" +
             "id=" + id +
             ", courseId=" + courseId +
+            ", type=" + type +
             ", question='" + question + '\'' +
+            ", choices=" + choices +
+            ", solution='" + solution + '\'' +
             '}';
     }
 

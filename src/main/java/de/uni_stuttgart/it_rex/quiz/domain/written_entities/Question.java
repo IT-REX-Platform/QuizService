@@ -1,5 +1,6 @@
 package de.uni_stuttgart.it_rex.quiz.domain.written_entities;
 
+import de.uni_stuttgart.it_rex.quiz.domain.enumeration.QUESTIONTYPE;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -9,10 +10,7 @@ import de.uni_stuttgart.it_rex.quiz.service.dto.written_dtos.AnswerTypeDTO.ANSWE
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * A Question.
@@ -25,12 +23,25 @@ public class Question implements Serializable {
     @Id
     private UUID id;
 
-    @Field("type")
-    private ANSWER_TYPE type;
+    @Field
+    private QUESTIONTYPE type;
 
-    @Field("question")
+    @Field
     private String question;
 
+    @Field
+    private Map<String, String> choices;
+
+    @Field
+    private String solution;
+
+    @DBRef(lazy = true)
+    @Field
+    private Set<Quiz> quizzes;
+
+    public boolean isNew() {
+        return (getId() == null);
+    }
 
     public UUID getId() {
         return id;
@@ -40,19 +51,11 @@ public class Question implements Serializable {
         this.id = id;
     }
 
-    public boolean isNew() {
-        return (getId() == null);
-    }
-
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
-    }
-
-    public ANSWER_TYPE getType() {
+    public QUESTIONTYPE getType() {
         return type;
     }
 
-    public void setType(ANSWER_TYPE type) {
+    public void setType(QUESTIONTYPE type) {
         this.type = type;
     }
 
@@ -64,17 +67,57 @@ public class Question implements Serializable {
         this.question = question;
     }
 
+    public Map<String, String> getChoices() {
+        return choices;
+    }
+
+    public void setChoices(Map<String, String> choices) {
+        this.choices = choices;
+    }
+
+    public String getSolution() {
+        return solution;
+    }
+
+    public void setSolution(String solution) {
+        this.solution = solution;
+    }
+
+    public Set<Quiz> getQuizzes() {
+        return quizzes;
+    }
+
+    public void setQuizzes(Set<Quiz> quizzes) {
+        this.quizzes = quizzes;
+    }
+
+    public Question addQuiz(Quiz quiz) {
+        this.quizzes.add(quiz);
+        quiz.getQuestions().add(this);
+        return this;
+    }
+
+    public Question removeQuiz(Quiz quiz) {
+        this.quizzes.remove(quiz);
+        quiz.getQuestions().remove(this);
+        return this;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Question question1 = (Question) o;
-        return Objects.equals(getId(), question1.getId()) && getType() == question1.getType() && Objects.equals(getQuestion(), question1.getQuestion());
+        return Objects.equals(getId(), question1.getId()) && getType() == question1.getType()
+                && Objects.equals(getQuestion(), question1.getQuestion())
+                && Objects.equals(getChoices(), question1.getChoices())
+                && Objects.equals(getSolution(), question1.getSolution())
+                && Objects.equals(getQuizzes(), question1.getQuizzes());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getType(), getQuestion());
+        return Objects.hash(getId(), getType(), getQuestion(), getChoices(), getSolution(), getQuizzes());
     }
 
     @Override
@@ -83,6 +126,9 @@ public class Question implements Serializable {
             "id=" + id +
             ", type=" + type +
             ", question='" + question + '\'' +
+            ", choices=" + choices +
+            ", solution='" + solution + '\'' +
+            ", quizzes=" + quizzes +
             '}';
     }
 }

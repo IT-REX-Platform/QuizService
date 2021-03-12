@@ -64,7 +64,9 @@ public class QuizDTO implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         QuizDTO quizDTO = (QuizDTO) o;
-        return Objects.equals(getId(), quizDTO.getId()) && Objects.equals(getName(), quizDTO.getName()) && Objects.equals(getCourseId(), quizDTO.getCourseId()) && Objects.equals(getQuestions(), quizDTO.getQuestions());
+        return Objects.equals(getId(), quizDTO.getId()) && Objects.equals(getName(), quizDTO.getName())
+                && Objects.equals(getCourseId(), quizDTO.getCourseId())
+                && Objects.equals(getQuestions(), quizDTO.getQuestions());
     }
 
     @Override

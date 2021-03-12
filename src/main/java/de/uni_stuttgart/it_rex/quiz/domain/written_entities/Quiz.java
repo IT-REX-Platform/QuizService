@@ -1,14 +1,13 @@
 package de.uni_stuttgart.it_rex.quiz.domain.written_entities;
 
+import de.uni_stuttgart.it_rex.quiz.service.dto.written_dtos.QuestionDTO;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * A Quiz.
@@ -21,12 +20,19 @@ public class Quiz implements Serializable {
     @Id
     private UUID id;
 
-    @Field("content")
-    private String content;
+    @Field
+    private String name;
 
-    // @DBRef
-    // @Field("b")
-    // private Set<EntityB> bs = new HashSet<>();
+    @Field
+    private UUID courseId;
+
+    @DBRef(lazy = true)
+    @Field
+    private Set<Question> questions;
+
+    public boolean isNew() {
+        return (getId() == null);
+    }
 
     public UUID getId() {
         return id;
@@ -36,65 +42,64 @@ public class Quiz implements Serializable {
         this.id = id;
     }
 
-    public boolean isNew() {
-        return (getId() == null);
+    public String getName() {
+        return name;
     }
 
-    public String getContent() {
-        return content;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public UUID getCourseId() {
+        return courseId;
     }
 
-    // public Set<EntityB> getBs() {
-    //     return bs;
-    // }
+    public void setCourseId(UUID courseId) {
+        this.courseId = courseId;
+    }
 
-    // public EntityA bs(Set<EntityB> entityBS) {
-    //     this.bs = entityBS;
-    //     return this;
-    // }
+    public Set<Question> getQuestions() {
+        return questions;
+    }
 
-    // public EntityA addB(EntityB entityB) {
-    //     this.bs.add(entityB);
-    //     entityB.setA(this);
-    //     return this;
-    // }
+    public void setQuestions(Set<Question> questions) {
+        this.questions = questions;
+    }
 
-    // public EntityA removeB(EntityB entityB) {
-    //     this.bs.remove(entityB);
-    //     entityB.setA(null);
-    //     return this;
-    // }
+    public Quiz addQuestion(Question question) {
+        this.questions.add(question);
+        question.getQuizzes().add(this);
+        return this;
+    }
 
-    // public void setBs(Set<EntityB> entityBS) {
-    //     this.bs = entityBS;
-    // }
+    public Quiz removeQuestion(Question question) {
+        this.questions.remove(question);
+        question.getQuizzes().remove(this);
+        return this;
+    }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof Quiz)) {
-            return false;
-        }
-        return id != null && id.equals(((Quiz) o).id);
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Quiz quiz = (Quiz) o;
+        return Objects.equals(getId(), quiz.getId()) && Objects.equals(getName(), quiz.getName())
+                && Objects.equals(getCourseId(), quiz.getCourseId())
+                && Objects.equals(getQuestions(), quiz.getQuestions());
     }
 
     @Override
     public int hashCode() {
-        return 31;
+        return Objects.hash(getId(), getName(), getCourseId(), getQuestions());
     }
 
-    // prettier-ignore
     @Override
     public String toString() {
         return "Quiz{" +
-            "id=" + getId() +
-            ", content='" + getContent() + "'" +
-            "}";
+            "id=" + id +
+            ", name='" + name + '\'' +
+            ", courseId=" + courseId +
+            ", questions=" + questions +
+            '}';
     }
 }
