@@ -1,22 +1,20 @@
 package de.uni_stuttgart.it_rex.quiz.service.written;
 
+import de.uni_stuttgart.it_rex.quiz.domain.written_entities.Question;
 import de.uni_stuttgart.it_rex.quiz.domain.written_entities.Quiz;
 import de.uni_stuttgart.it_rex.quiz.repository.written.QuizRepository;
-import de.uni_stuttgart.it_rex.quiz.service.dto.written_dtos.QuestionDTO;
 import de.uni_stuttgart.it_rex.quiz.service.dto.written_dtos.QuizDTO;
 import de.uni_stuttgart.it_rex.quiz.service.mapper.written.QuizMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
-
-import javax.transaction.Transactional;
 
 /**
  * Service Implementation for managing {@link Quiz}.
@@ -48,10 +46,13 @@ public class QuizService {
     public QuizDTO save(final QuizDTO quizDTO) {
         log.debug("Request to save Quiz : {}", quizDTO);
 
-        quizDTO.setQuestions(quizDTO.getQuestions().stream().map(questionService::save).collect(Collectors.toList()));
+        // create questions
+        quizDTO.setQuestions(questionService.save(quizDTO.getQuestions()));
 
+        // create quiz
         Quiz quiz = quizMapper.toEntity(quizDTO);
         quiz = quizRepository.save(quiz);
+
         return quizMapper.toDto(quiz);
     }
 
@@ -72,7 +73,7 @@ public class QuizService {
      *
      * @return the list of entities.
      */
-    public List<QuizDTO> findAll(final UUID courseId) {
+    public List<QuizDTO> findByCourseId(final UUID courseId) {
         log.debug("Request to get Course Quizzes");
         return quizRepository.findByCourseId(courseId).stream()
             .map(quizMapper::toDto)
@@ -98,5 +99,32 @@ public class QuizService {
     public void delete(final UUID id) {
         log.debug("Request to delete Quiz : {}", id);
         quizRepository.deleteById(id);
+    }
+
+    /**
+     * Delete the all Quizzes by id.
+     *
+     * @param ids the ids of the Quizzes.
+     */
+    public void deleteAll(final List<UUID> ids) {
+        log.debug("Request to delete all Quizzes : {}", ids);
+        quizRepository.deleteByIdIn(ids);
+    }
+
+    /**
+     * Delete the Quiz by id.
+     *
+     * @param id the id of the entity.
+     */
+    public void delete(final UUID id, boolean withQuestions) {
+        log.debug("Request to delete Quiz with Questions: {}", id);
+        if (withQuestions) {
+            Optional<Quiz> quiz = quizRepository.findById(id);
+            if (quiz.isPresent()) {
+                List<UUID> questionIds = quiz.get().getQuestions().stream().map(Question::getId).collect(Collectors.toList());
+                questionService.deleteByIdIn(questionIds);
+            }
+        }
+        delete(id);
     }
 }

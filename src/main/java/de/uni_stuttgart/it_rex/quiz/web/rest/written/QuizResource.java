@@ -123,7 +123,7 @@ public class QuizResource {
     @GetMapping(value="/quizzes", params="course_id")
     public List<QuizDTO> getCourseQuizzes(@RequestParam("course_id") final UUID courseId) {
         log.debug("REST request to get all Quizzes");
-        return quizService.findAll(courseId);
+        return quizService.findByCourseId(courseId);
     }
 
     /**
@@ -147,10 +147,12 @@ public class QuizResource {
      */
     @DeleteMapping("/quizzes/{id}")
     public ResponseEntity<Void> deleteQuiz(@PathVariable final UUID id,
-            @RequestParam("with_questions") final Optional<Boolean> withQuestions) {
+            @RequestParam(value = "with_questions", required = false, defaultValue = "false") final boolean withQuestions) {
         log.debug("REST request to delete quiz : {}", id);
-        quizService.delete(id);
-        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
+        quizService.delete(id, withQuestions);
+        return ResponseEntity.noContent()
+                .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
+                .build();
     }
 
 }

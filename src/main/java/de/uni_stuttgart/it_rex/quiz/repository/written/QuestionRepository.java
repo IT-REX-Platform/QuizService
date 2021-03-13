@@ -16,5 +16,9 @@ import org.springframework.stereotype.Repository;
 public interface QuestionRepository extends MongoRepository<Question, UUID> {
 
     List<Question> findByCourseId(UUID courseId);
+    void deleteByCourseId(UUID courseId);
+
+    List<Question> findByIdIn(List<UUID> ids);
+    void deleteByIdIn(List<UUID> ids);
 
 }

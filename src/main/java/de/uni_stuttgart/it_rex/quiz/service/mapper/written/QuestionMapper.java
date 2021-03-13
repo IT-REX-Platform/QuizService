@@ -20,6 +20,7 @@ import org.mapstruct.*;
 public interface QuestionMapper extends EntityMapper<QuestionDTO, Question> {
 
     @Mapping(target = "removeQuiz", ignore = true)
+    @Mapping(target = "removeQuizzes", ignore = true)
     @Mapping(target = "quizzes", ignore = true)
     Question toEntity(QuestionDTO dto);
 
@@ -29,4 +30,5 @@ public interface QuestionMapper extends EntityMapper<QuestionDTO, Question> {
     default UUID quizToUuid(Quiz quiz) {
         return quiz.getId();
     }
+
 }

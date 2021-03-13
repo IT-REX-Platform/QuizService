@@ -111,7 +111,7 @@ public class QuestionResource {
      */
     @GetMapping("/questions")
     public List<QuestionDTO> getAllQuestions() {
-        log.debug("REST request to get all Questionzes");
+        log.debug("REST request to get all Questions");
         return questionService.findAll();
     }
 
@@ -122,7 +122,7 @@ public class QuestionResource {
      */
     @GetMapping(value="/questions", params="course_id")
     public List<QuestionDTO> getCourseQuestions(@RequestParam("course_id") final UUID courseId) {
-        log.debug("REST request to get all questions");
+        log.debug("REST request to get Course Questions");
         return questionService.findAll(courseId);
     }
 
@@ -146,8 +146,8 @@ public class QuestionResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/questions/{id}")
-    public ResponseEntity<Void> deletequestion(@PathVariable final UUID id) {
-        log.debug("REST request to delete question : {}", id);
+    public ResponseEntity<Void> deleteQuestion(@PathVariable final UUID id) {
+        log.debug("REST request to delete Questions : {}", id);
         questionService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }

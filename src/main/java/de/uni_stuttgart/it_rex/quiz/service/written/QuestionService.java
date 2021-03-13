@@ -46,27 +46,51 @@ public class QuestionService {
     }
 
     /**
-     * Get all the QuestionS.
+     * Save a Question.
+     *
+     * @param QuestionDTO the entity to save.
+     * @return the persisted entity.
+     */
+    public List<QuestionDTO> save(final List<QuestionDTO> questionDTOs) {
+        log.debug("Request to save Questions : {}", questionDTOs);
+        List<Question> questions = questionMapper.toEntity(questionDTOs);
+        questions = questionRepository.saveAll(questions);
+        return questionMapper.toDto(questions);
+    }
+
+    /**
+     * Get all the Questions.
      *
      * @return the list of entities.
      */
     public List<QuestionDTO> findAll() {
-        log.debug("Request to get all QuestionS");
+        log.debug("Request to get all Questions");
         return questionRepository.findAll().stream()
             .map(questionMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
     }
 
     /**
-     * Get all the QuestionS.
+     * Get all the Questions.
      *
      * @return the list of entities.
      */
     public List<QuestionDTO> findAll(final UUID courseId) {
-        log.debug("Request to get all QuestionS");
+        log.debug("Request to get all Questions");
         return questionRepository.findByCourseId(courseId).stream()
             .map(questionMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
+    }
+
+    /**
+     * Get all the Questions.
+     *
+     * @return the list of entities.
+     */
+    public List<QuestionDTO> findByIdIn(final List<UUID> ids) {
+        log.debug("Request to get List of Questions : {}", ids);
+        return questionRepository.findByIdIn(ids).stream().map(questionMapper::toDto)
+                .collect(Collectors.toCollection(LinkedList::new));
     }
 
     /**
@@ -88,5 +112,15 @@ public class QuestionService {
     public void delete(final UUID id) {
         log.debug("Request to delete Question : {}", id);
         questionRepository.deleteById(id);
+    }
+
+    /**
+     * Delete the all Questions by id.
+     *
+     * @param ids the ids of the Questions.
+     */
+    public void deleteByIdIn(final List<UUID> ids) {
+        log.debug("Request to delete all Questions : {}", ids);
+        questionRepository.deleteByIdIn(ids);
     }
 }

@@ -2,7 +2,6 @@ package de.uni_stuttgart.it_rex.quiz.service.dto.written_dtos;
 
 import de.uni_stuttgart.it_rex.quiz.domain.enumeration.QUESTIONTYPE;
 
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
@@ -18,7 +17,6 @@ public class QuestionDTO implements Serializable {
     /**
      * Course id.
      */
-    @NotNull
     private UUID courseId;
 
     private List<UUID> quizIds;
@@ -92,12 +90,12 @@ public class QuestionDTO implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         QuestionDTO that = (QuestionDTO) o;
-        return Objects.equals(getId(), that.getId()) && Objects.equals(getCourseId(), that.getCourseId()) && Objects.equals(getQuizIds(), that.getQuizIds()) && getType() == that.getType() && Objects.equals(getQuestion(), that.getQuestion()) && Objects.equals(getChoices(), that.getChoices()) && Objects.equals(getSolution(), that.getSolution());
+        return Objects.equals(getId(), that.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getCourseId(), getQuizIds(), getType(), getQuestion(), getChoices(), getSolution());
+        return Objects.hash(getId());
     }
 
     @Override

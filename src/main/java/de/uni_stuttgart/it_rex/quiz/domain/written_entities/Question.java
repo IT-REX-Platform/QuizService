@@ -108,9 +108,21 @@ public class Question implements Serializable {
         return this;
     }
 
+    public Question addQuizzes(Set<Quiz> quizzes) {
+        this.quizzes.addAll(quizzes);
+        quizzes.stream().map(Quiz::getQuestions).forEach(o -> o.add(this));
+        return this;
+    }
+
     public Question removeQuiz(Quiz quiz) {
         this.quizzes.remove(quiz);
         quiz.getQuestions().remove(this);
+        return this;
+    }
+
+    public Question removeQuizzes(Set<Quiz> quizzes) {
+        this.quizzes.removeAll(quizzes);
+        quizzes.stream().map(Quiz::getQuestions).forEach(o -> o.remove(this));
         return this;
     }
 
@@ -119,16 +131,12 @@ public class Question implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Question question1 = (Question) o;
-        return Objects.equals(getId(), question1.getId()) && getType() == question1.getType()
-                && Objects.equals(getQuestion(), question1.getQuestion())
-                && Objects.equals(getChoices(), question1.getChoices())
-                && Objects.equals(getSolution(), question1.getSolution())
-                && Objects.equals(getQuizzes(), question1.getQuizzes());
+        return Objects.equals(getId(), question1.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getType(), getQuestion(), getChoices(), getSolution(), getQuizzes());
+        return Objects.hash(getId());
     }
 
     @Override

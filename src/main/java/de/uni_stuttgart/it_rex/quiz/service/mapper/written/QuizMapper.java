@@ -16,5 +16,7 @@ import org.mapstruct.*;
 public interface QuizMapper extends EntityMapper<QuizDTO, Quiz> {
 
     @Mapping(target = "removeQuestion", ignore = true)
+    @Mapping(target = "removeQuestions", ignore = true)
     Quiz toEntity(QuizDTO dto);
+
 }
