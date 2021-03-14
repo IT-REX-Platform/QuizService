@@ -1,6 +1,5 @@
 package de.uni_stuttgart.it_rex.quiz.domain.written_entities;
 
-import de.uni_stuttgart.it_rex.quiz.service.dto.written_dtos.QuestionDTO;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -8,7 +7,6 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import java.io.Serializable;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * A Quiz.
