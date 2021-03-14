@@ -3,9 +3,9 @@ package de.uni_stuttgart.it_rex.quiz.service.dto.written_dtos;
 import de.uni_stuttgart.it_rex.quiz.domain.enumeration.QUESTIONTYPE;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 
 public class QuestionDTO implements Serializable {
@@ -19,7 +19,7 @@ public class QuestionDTO implements Serializable {
      */
     private UUID courseId;
 
-    private List<UUID> quizIds;
+    private Set<UUID> quizIds;
 
     private QUESTIONTYPE type;
 
@@ -45,11 +45,11 @@ public class QuestionDTO implements Serializable {
         this.courseId = courseId;
     }
 
-    public List<UUID> getQuizIds() {
+    public Set<UUID> getQuizIds() {
         return quizIds;
     }
 
-    public void setQuizIds(List<UUID> quizIds) {
+    public void setQuizIds(Set<UUID> quizIds) {
         this.quizIds = quizIds;
     }
 

@@ -41,7 +41,7 @@ public class Question implements Serializable {
     @Field
     private String solution;
 
-    @Field(name = "quiz_ids")
+    @Field
     private Set<UUID> quizIds = new HashSet<>();
 
     public boolean isNew() {
