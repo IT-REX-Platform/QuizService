@@ -29,17 +29,11 @@ public class Question implements Serializable {
     @Field
     private UUID courseId;
 
-    @Field
-    private QUESTIONTYPE type;
+    // @Field
+    // private QUESTIONTYPE type;
 
     @Field
     private String question;
-
-    @Field
-    private Map<String, String> choices;
-
-    @Field
-    private String solution;
 
     @Field
     private Set<UUID> quizIds = new HashSet<>();
@@ -64,13 +58,13 @@ public class Question implements Serializable {
         this.courseId = courseId;
     }
 
-    public QUESTIONTYPE getType() {
-        return type;
-    }
+    // public QUESTIONTYPE getType() {
+    //     return type;
+    // }
 
-    public void setType(QUESTIONTYPE type) {
-        this.type = type;
-    }
+    // public void setType(QUESTIONTYPE type) {
+    //     this.type = type;
+    // }
 
     public String getQuestion() {
         return question;
@@ -78,22 +72,6 @@ public class Question implements Serializable {
 
     public void setQuestion(String question) {
         this.question = question;
-    }
-
-    public Map<String, String> getChoices() {
-        return choices;
-    }
-
-    public void setChoices(Map<String, String> choices) {
-        this.choices = choices;
-    }
-
-    public String getSolution() {
-        return solution;
-    }
-
-    public void setSolution(String solution) {
-        this.solution = solution;
     }
 
     public Set<UUID> getQuizIds() {
@@ -145,10 +123,8 @@ public class Question implements Serializable {
     public String toString() {
         return "Question{" +
             "id=" + id +
-            ", type=" + type +
-            ", question='" + question + '\'' +
-            ", choices=" + choices +
-            ", solution='" + solution + '\'' +
+            // ", type=" + type +
+            ", question=" + question +
             ", quizzes=" + quizIds +
             '}';
     }

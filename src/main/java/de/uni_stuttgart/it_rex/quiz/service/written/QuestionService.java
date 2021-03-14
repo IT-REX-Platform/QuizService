@@ -1,9 +1,19 @@
 package de.uni_stuttgart.it_rex.quiz.service.written;
 
 import de.uni_stuttgart.it_rex.quiz.domain.written_entities.Question;
+import de.uni_stuttgart.it_rex.quiz.domain.written_entities.QuestionMultipleChoice;
+import de.uni_stuttgart.it_rex.quiz.domain.written_entities.QuestionNumeric;
+import de.uni_stuttgart.it_rex.quiz.domain.written_entities.QuestionSingleChoice;
 import de.uni_stuttgart.it_rex.quiz.repository.written.QuestionRepository;
 import de.uni_stuttgart.it_rex.quiz.service.dto.written_dtos.QuestionDTO;
+import de.uni_stuttgart.it_rex.quiz.service.dto.written_dtos.QuestionMultipleChoiceDTO;
+import de.uni_stuttgart.it_rex.quiz.service.dto.written_dtos.QuestionNumericDTO;
+import de.uni_stuttgart.it_rex.quiz.service.dto.written_dtos.QuestionSingleChoiceDTO;
 import de.uni_stuttgart.it_rex.quiz.service.mapper.written.QuestionMapper;
+import de.uni_stuttgart.it_rex.quiz.service.mapper.written.QuestionMultipleChoiceMapper;
+import de.uni_stuttgart.it_rex.quiz.service.mapper.written.QuestionNumericMapper;
+import de.uni_stuttgart.it_rex.quiz.service.mapper.written.QuestionSingleChoiceMapper;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,10 +37,54 @@ public class QuestionService {
     private final QuestionRepository questionRepository;
 
     private final QuestionMapper questionMapper;
+    private final QuestionSingleChoiceMapper questionSingleChoiceMapper;
+    private final QuestionMultipleChoiceMapper questionMultipleChoiceMapper;
+    private final QuestionNumericMapper questionNumericMapper;
 
-    public QuestionService(QuestionRepository newQuestionRepository, QuestionMapper newQuestionMapper) {
+    public QuestionService(QuestionRepository newQuestionRepository,
+            QuestionMapper newQuestionMapper,
+            QuestionSingleChoiceMapper newQuestionSingleChoiceMapper,
+            QuestionMultipleChoiceMapper newQuestionMultipleChoiceMapper,
+            QuestionNumericMapper newQuestionNumericMapper) {
         this.questionRepository = newQuestionRepository;
         this.questionMapper = newQuestionMapper;
+        this.questionSingleChoiceMapper = newQuestionSingleChoiceMapper;
+        this.questionMultipleChoiceMapper = newQuestionMultipleChoiceMapper;
+        this.questionNumericMapper = newQuestionNumericMapper;
+    }
+
+    Question mapDto(QuestionDTO questionDTO) {
+        if (questionDTO instanceof QuestionSingleChoiceDTO) {
+            return questionSingleChoiceMapper.toEntity((QuestionSingleChoiceDTO)questionDTO);
+        }
+        else if (questionDTO instanceof QuestionMultipleChoiceDTO) {
+            return questionMultipleChoiceMapper.toEntity((QuestionMultipleChoiceDTO)questionDTO);
+        }
+        else if (questionDTO instanceof QuestionNumericDTO) {
+            return questionNumericMapper.toEntity((QuestionNumericDTO)questionDTO);
+        }
+        return questionMapper.toEntity(questionDTO);
+    }
+
+    List<Question> mapDtos(List<QuestionDTO> questionDTOs) {
+        return questionDTOs.stream().map(this::mapDto).collect(Collectors.toCollection(LinkedList::new));
+    }
+
+    QuestionDTO mapEntity(Question question) {
+        if (question instanceof QuestionSingleChoice) {
+            return questionSingleChoiceMapper.toDto((QuestionSingleChoice)question);
+        }
+        else if (question instanceof QuestionMultipleChoice) {
+            return questionMultipleChoiceMapper.toDto((QuestionMultipleChoice)question);
+        }
+        else if (question instanceof QuestionNumeric) {
+            return questionNumericMapper.toDto((QuestionNumeric)question);
+        }
+        return questionMapper.toDto(question);
+    }
+
+    List<QuestionDTO> mapEntities(List<Question> questions) {
+        return questions.stream().map(this::mapEntity).collect(Collectors.toCollection(LinkedList::new));
     }
 
     /**
@@ -41,7 +95,8 @@ public class QuestionService {
      */
     public QuestionDTO save(final QuestionDTO questionDTO) {
         log.debug("Request to save QuestionDTO : {}", questionDTO);
-        Question question = questionMapper.toEntity(questionDTO);
+
+        Question question = mapDto(questionDTO);
 
         // if it exists, ignore new QuizIds
         if (!question.isNew()) {
@@ -52,7 +107,7 @@ public class QuestionService {
         }
 
         question = questionRepository.save(question);
-        return questionMapper.toDto(question);
+        return mapEntity(question);
     }
 
     /**
@@ -63,7 +118,7 @@ public class QuestionService {
      */
     public List<QuestionDTO> save(final List<QuestionDTO> questionDTOs) {
         log.debug("Request to save QuestionsDTO : {}", questionDTOs);
-        List<Question> questions = questionMapper.toEntity(questionDTOs);
+        List<Question> questions = mapDtos(questionDTOs);
 
         // if Question exists, ignore new QuizIds
         List<UUID> ids = questions.stream().filter(o -> !o.isNew()).map(Question::getId).collect(Collectors.toCollection(LinkedList::new));
@@ -76,7 +131,7 @@ public class QuestionService {
         });
 
         questions = questionRepository.saveAll(questions);
-        return questionMapper.toDto(questions);
+        return mapEntities(questions);
     }
 
     /**

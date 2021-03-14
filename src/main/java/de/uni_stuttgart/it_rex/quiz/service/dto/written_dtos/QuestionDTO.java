@@ -3,11 +3,25 @@ package de.uni_stuttgart.it_rex.quiz.service.dto.written_dtos;
 import de.uni_stuttgart.it_rex.quiz.domain.enumeration.QUESTIONTYPE;
 
 import java.io.Serializable;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
+
+// SINGLE_CHOICE, MULTIPLE_CHOICE, NUMERIC
+
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME, 
+  include = JsonTypeInfo.As.PROPERTY, 
+  property = "type")
+@JsonSubTypes({ 
+  @JsonSubTypes.Type(value = QuestionSingleChoiceDTO.class, name = "SINGLE_CHOICE"),
+  @JsonSubTypes.Type(value = QuestionMultipleChoiceDTO.class, name = "MULTIPLE_CHOICE"),
+  @JsonSubTypes.Type(value = QuestionNumericDTO.class, name = "NUMERIC")
+})
 public class QuestionDTO implements Serializable {
     /**
      * Identifier.
@@ -21,13 +35,9 @@ public class QuestionDTO implements Serializable {
 
     private Set<UUID> quizIds;
 
-    private QUESTIONTYPE type;
+    // private QUESTIONTYPE type;
 
     private String question;
-
-    private Map<String, String> choices;
-
-    private String solution;
 
     public UUID getId() {
         return id;
@@ -53,13 +63,13 @@ public class QuestionDTO implements Serializable {
         this.quizIds = quizIds;
     }
 
-    public QUESTIONTYPE getType() {
-        return type;
-    }
+    // public QUESTIONTYPE getType() {
+    //     return type;
+    // }
 
-    public void setType(QUESTIONTYPE type) {
-        this.type = type;
-    }
+    // public void setType(QUESTIONTYPE type) {
+    //     this.type = type;
+    // }
 
     public String getQuestion() {
         return question;
@@ -67,22 +77,6 @@ public class QuestionDTO implements Serializable {
 
     public void setQuestion(String question) {
         this.question = question;
-    }
-
-    public Map<String, String> getChoices() {
-        return choices;
-    }
-
-    public void setChoices(Map<String, String> choices) {
-        this.choices = choices;
-    }
-
-    public String getSolution() {
-        return solution;
-    }
-
-    public void setSolution(String solution) {
-        this.solution = solution;
     }
 
     @Override
@@ -104,10 +98,8 @@ public class QuestionDTO implements Serializable {
             "id=" + id +
             ", courseId=" + courseId +
             ", quizIds=" + quizIds +
-            ", type=" + type +
+            // ", type=" + type +
             ", question='" + question + '\'' +
-            ", choices=" + choices +
-            ", solution='" + solution + '\'' +
             '}';
     }
 
