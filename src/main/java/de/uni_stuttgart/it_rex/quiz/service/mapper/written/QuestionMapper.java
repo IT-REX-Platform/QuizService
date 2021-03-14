@@ -20,9 +20,6 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring", uses = {})
 public interface QuestionMapper extends EntityMapper<QuestionDTO, Question> {
 
-    // @Mapping(target = "removeQuiz", ignore = true)
-    // @Mapping(target = "removeQuizzes", ignore = true)
-    // @Mapping(target = "quizIds", ignore = true)
     default Question toEntity(QuestionDTO dto) {
         if (dto instanceof QuestionSingleChoiceDTO) {
             return this.toEntity((QuestionSingleChoiceDTO)dto);
@@ -49,12 +46,18 @@ public interface QuestionMapper extends EntityMapper<QuestionDTO, Question> {
         return this.toDto(entity);
     }
 
+    @Mapping(target = "removeQuiz", ignore = true)
+    @Mapping(target = "removeQuizzes", ignore = true)
     QuestionSingleChoice toEntity(QuestionSingleChoiceDTO dto);
     QuestionSingleChoiceDTO toDto(QuestionSingleChoice entity);
-    
+
+    @Mapping(target = "removeQuiz", ignore = true)
+    @Mapping(target = "removeQuizzes", ignore = true)
     QuestionMultipleChoice toEntity(QuestionMultipleChoiceDTO dto);
     QuestionMultipleChoiceDTO toDto(QuestionMultipleChoice entity);
-    
+
+    @Mapping(target = "removeQuiz", ignore = true)
+    @Mapping(target = "removeQuizzes", ignore = true)
     QuestionNumeric toEntity(QuestionNumericDTO dto);
     QuestionNumericDTO toDto(QuestionNumeric entity);
 
