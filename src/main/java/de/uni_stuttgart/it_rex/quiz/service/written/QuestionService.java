@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -39,8 +40,17 @@ public class QuestionService {
      * @return the persisted entity.
      */
     public QuestionDTO save(final QuestionDTO questionDTO) {
-        log.debug("Request to save Question : {}", questionDTO);
+        log.debug("Request to save QuestionDTO : {}", questionDTO);
         Question question = questionMapper.toEntity(questionDTO);
+
+        // if it exists, ignore new QuizIds
+        if (!question.isNew()) {
+            Optional<Question> questionDb = questionRepository.findById(question.getId());
+            if (questionDb.isPresent()) {
+                question.setQuizIds(questionDb.get().getQuizIds());
+            }
+        }
+
         question = questionRepository.save(question);
         return questionMapper.toDto(question);
     }
@@ -52,8 +62,19 @@ public class QuestionService {
      * @return the persisted entity.
      */
     public List<QuestionDTO> save(final List<QuestionDTO> questionDTOs) {
-        log.debug("Request to save Questions : {}", questionDTOs);
+        log.debug("Request to save QuestionsDTO : {}", questionDTOs);
         List<Question> questions = questionMapper.toEntity(questionDTOs);
+
+        // if Question exists, ignore new QuizIds
+        List<UUID> ids = questions.stream().filter(o -> !o.isNew()).map(Question::getId).collect(Collectors.toCollection(LinkedList::new));
+        Map<UUID, Question> questionsDb = questionRepository.findByIdIn(ids).stream().collect(Collectors.toMap(Question::getId, o -> o));
+        questions.forEach(o -> {
+            Optional<Question> q = Optional.ofNullable(questionsDb.get(o.getId()));
+            if (q.isPresent()) {
+                o.setQuizIds(q.get().getQuizIds());
+            }
+        });
+
         questions = questionRepository.saveAll(questions);
         return questionMapper.toDto(questions);
     }
@@ -64,7 +85,18 @@ public class QuestionService {
      * @param Question the entity to save.
      * @return the persisted entity.
      */
-    public List<Question> saveEntity(final List<Question> questions) {
+    public Question saveEntity(final Question question) {
+        log.debug("Request to save Question : {}", question);
+        return questionRepository.save(question);
+    }
+
+    /**
+     * Save a Question.
+     *
+     * @param Question the entity to save.
+     * @return the persisted entity.
+     */
+    public List<Question> saveEntities(final List<Question> questions) {
         log.debug("Request to save Questions : {}", questions);
         return questionRepository.saveAll(questions);
     }
