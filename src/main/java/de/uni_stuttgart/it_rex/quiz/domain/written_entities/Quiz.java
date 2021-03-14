@@ -1,6 +1,7 @@
 package de.uni_stuttgart.it_rex.quiz.domain.written_entities;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -12,6 +13,7 @@ import java.util.*;
  * A Quiz.
  */
 @Document(collection = "quizzes")
+@TypeAlias("Quiz")
 public class Quiz implements Serializable {
 
     private static final long serialVersionUID = 1L;

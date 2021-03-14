@@ -35,8 +35,6 @@ public class QuestionDTO implements Serializable {
 
     private Set<UUID> quizIds;
 
-    // private QUESTIONTYPE type;
-
     private String question;
 
     public UUID getId() {
@@ -62,14 +60,6 @@ public class QuestionDTO implements Serializable {
     public void setQuizIds(Set<UUID> quizIds) {
         this.quizIds = quizIds;
     }
-
-    // public QUESTIONTYPE getType() {
-    //     return type;
-    // }
-
-    // public void setType(QUESTIONTYPE type) {
-    //     this.type = type;
-    // }
 
     public String getQuestion() {
         return question;
@@ -98,12 +88,8 @@ public class QuestionDTO implements Serializable {
             "id=" + id +
             ", courseId=" + courseId +
             ", quizIds=" + quizIds +
-            // ", type=" + type +
             ", question='" + question + '\'' +
             '}';
     }
 
-// for later impls
-    // for search
-    // private List<String> tags;
 }

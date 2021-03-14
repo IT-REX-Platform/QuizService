@@ -2,6 +2,7 @@ package de.uni_stuttgart.it_rex.quiz.domain.written_entities;
 
 import de.uni_stuttgart.it_rex.quiz.domain.enumeration.QUESTIONTYPE;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
  * A Question.
  */
 @Document(collection = "questions")
+@TypeAlias("Question")
 public class Question implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -28,9 +30,6 @@ public class Question implements Serializable {
 
     @Field
     private UUID courseId;
-
-    // @Field
-    // private QUESTIONTYPE type;
 
     @Field
     private String question;
@@ -57,14 +56,6 @@ public class Question implements Serializable {
     public void setCourseId(UUID courseId) {
         this.courseId = courseId;
     }
-
-    // public QUESTIONTYPE getType() {
-    //     return type;
-    // }
-
-    // public void setType(QUESTIONTYPE type) {
-    //     this.type = type;
-    // }
 
     public String getQuestion() {
         return question;
@@ -123,7 +114,6 @@ public class Question implements Serializable {
     public String toString() {
         return "Question{" +
             "id=" + id +
-            // ", type=" + type +
             ", question=" + question +
             ", quizzes=" + quizIds +
             '}';

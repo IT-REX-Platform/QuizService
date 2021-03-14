@@ -4,8 +4,6 @@ import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-import java.io.Serializable;
-
 /**
  * A Question.
  */
@@ -31,7 +29,6 @@ public class QuestionNumeric extends Question {
         return "QuestionNumeric{" +
             "id=" + getId() +
             ", courseId=" + getCourseId() +
-            // ", type=" + getType() +
             ", question='" + getQuestion() + '\'' +
             ", quizIds=" + getQuizIds() +
             ", solution=" + solution +

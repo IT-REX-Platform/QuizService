@@ -1,11 +1,8 @@
 package de.uni_stuttgart.it_rex.quiz.service.mapper.written;
 
-
 import de.uni_stuttgart.it_rex.quiz.domain.written_entities.Quiz;
 import de.uni_stuttgart.it_rex.quiz.service.dto.written_dtos.QuizDTO;
 import de.uni_stuttgart.it_rex.quiz.service.mapper.EntityMapper;
-
-import java.util.UUID;
 
 import org.mapstruct.*;
 

@@ -30,7 +30,6 @@ public class QuestionMultipleChoiceDTO extends QuestionDTO {
             "id=" + getId() +
             ", courseId=" + getCourseId() +
             ", quizIds=" + getQuizIds() +
-            // ", type=" + getType() +
             ", question='" + getQuestion() + '\'' +
             ", choices=" + choices +
             ", solution='" + solution + '\'' +
