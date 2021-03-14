@@ -21,14 +21,8 @@ public interface QuestionMapper extends EntityMapper<QuestionDTO, Question> {
 
     @Mapping(target = "removeQuiz", ignore = true)
     @Mapping(target = "removeQuizzes", ignore = true)
-    @Mapping(target = "quizzes", ignore = true)
     Question toEntity(QuestionDTO dto);
 
-    @Mapping(target = "quizIds", source = "quizzes")
     QuestionDTO toDto(Question entity);
-
-    default UUID quizToUuid(Quiz quiz) {
-        return quiz.getId();
-    }
 
 }

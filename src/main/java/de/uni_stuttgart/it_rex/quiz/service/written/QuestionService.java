@@ -59,6 +59,17 @@ public class QuestionService {
     }
 
     /**
+     * Save a Question.
+     *
+     * @param Question the entity to save.
+     * @return the persisted entity.
+     */
+    public List<Question> saveEntity(final List<Question> questions) {
+        log.debug("Request to save Questions : {}", questions);
+        return questionRepository.saveAll(questions);
+    }
+
+    /**
      * Get all the Questions.
      *
      * @return the list of entities.

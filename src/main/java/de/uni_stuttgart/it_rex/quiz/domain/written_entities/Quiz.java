@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * A Quiz.
@@ -25,7 +26,6 @@ public class Quiz implements Serializable {
 
     @Field
     private String name;
-
 
     @DBRef(lazy = true)
     @Field
@@ -69,25 +69,25 @@ public class Quiz implements Serializable {
 
     public Quiz addQuestion(Question question) {
         this.questions.add(question);
-        question.getQuizzes().add(this);
+        question.getQuizIds().add(this.getId());
         return this;
     }
 
     public Quiz addQuestions(Set<Question> questions) {
         this.questions.addAll(questions);
-        questions.stream().map(Question::getQuizzes).forEach(o -> o.add(this));
+        questions.forEach(o -> o.getQuizIds().add(this.getId()));
         return this;
     }
 
     public Quiz removeQuestion(Question question) {
         this.questions.remove(question);
-        question.getQuizzes().remove(this);
+        question.getQuizIds().remove(this.getId());
         return this;
     }
 
     public Quiz removeQuestions(Set<Question> questions) {
         this.questions.removeAll(questions);
-        questions.stream().map(Question::getQuizzes).forEach(o -> o.remove(this));
+        questions.forEach(o -> o.getQuizIds().remove(this.getId()));
         return this;
     }
 

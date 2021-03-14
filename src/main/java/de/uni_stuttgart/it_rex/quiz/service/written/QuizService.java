@@ -53,6 +53,11 @@ public class QuizService {
         Quiz quiz = quizMapper.toEntity(quizDTO);
         quiz = quizRepository.save(quiz);
 
+        // add questions
+        // todo:  inefficient: avoid saving questions twice!
+        quiz.addQuestions(quiz.getQuestions());
+        questionService.saveEntity(quiz.getQuestions().stream().collect(Collectors.toCollection(LinkedList::new)));
+
         return quizMapper.toDto(quiz);
     }
 

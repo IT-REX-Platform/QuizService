@@ -5,12 +5,15 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-import de.uni_stuttgart.it_rex.quiz.service.dto.written_dtos.AnswerTypeDTO.ANSWER_TYPE;
-
-import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
 
 /**
  * A Question.
@@ -38,9 +41,8 @@ public class Question implements Serializable {
     @Field
     private String solution;
 
-    @DBRef(lazy = true)
-    @Field
-    private Set<Quiz> quizzes = new HashSet<>();
+    @Field(name = "quiz_ids")
+    private Set<UUID> quizIds = new HashSet<>();
 
     public boolean isNew() {
         return (getId() == null);
@@ -94,35 +96,35 @@ public class Question implements Serializable {
         this.solution = solution;
     }
 
-    public Set<Quiz> getQuizzes() {
-        return quizzes;
+    public Set<UUID> getQuizIds() {
+        return quizIds;
     }
 
-    public void setQuizzes(Set<Quiz> quizzes) {
-        this.quizzes = quizzes;
+    public void setQuizIds(Set<UUID> quizIds) {
+        this.quizIds = quizIds;
     }
 
     public Question addQuiz(Quiz quiz) {
-        this.quizzes.add(quiz);
+        this.quizIds.add(quiz.getId());
         quiz.getQuestions().add(this);
         return this;
     }
 
     public Question addQuizzes(Set<Quiz> quizzes) {
-        this.quizzes.addAll(quizzes);
-        quizzes.stream().map(Quiz::getQuestions).forEach(o -> o.add(this));
+        this.quizIds.addAll(quizzes.stream().map(Quiz::getId).collect(Collectors.toList()));
+        quizzes.forEach(o -> o.getQuestions().add(this));
         return this;
     }
 
     public Question removeQuiz(Quiz quiz) {
-        this.quizzes.remove(quiz);
+        this.quizIds.remove(quiz.getId());
         quiz.getQuestions().remove(this);
         return this;
     }
 
     public Question removeQuizzes(Set<Quiz> quizzes) {
-        this.quizzes.removeAll(quizzes);
-        quizzes.stream().map(Quiz::getQuestions).forEach(o -> o.remove(this));
+        this.quizIds.removeAll(quizzes.stream().map(Quiz::getId).collect(Collectors.toList()));
+        quizzes.forEach(o -> o.getQuestions().add(this));
         return this;
     }
 
@@ -147,7 +149,7 @@ public class Question implements Serializable {
             ", question='" + question + '\'' +
             ", choices=" + choices +
             ", solution='" + solution + '\'' +
-            ", quizzes=" + quizzes +
+            ", quizzes=" + quizIds +
             '}';
     }
 }
