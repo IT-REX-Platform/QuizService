@@ -14,6 +14,9 @@ public interface QuizMapper extends EntityMapper<QuizDTO, Quiz> {
 
     @Mapping(target = "removeQuestion", ignore = true)
     @Mapping(target = "removeQuestions", ignore = true)
+    @Mapping(target = "questions", qualifiedByName = "toEntity")
     Quiz toEntity(QuizDTO dto);
-
+    
+    @Mapping(target = "questions", qualifiedByName = "toDto")
+    QuizDTO toDto(Quiz dto);
 }
