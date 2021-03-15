@@ -87,10 +87,7 @@ public class QuestionResourceIT {
     public static Question createEntity() {
         Question question = new Question();
         question.setCourseId(DEFAULT_COURSEID);
-        question.setType(DEFAULT_TYPE);
         question.setQuestion(DEFAULT_QUESTION);
-        question.setChoices(DEFAULT_CHOICES);
-        question.setSolution(DEFAULT_SOLUTION);
         return question;
     }
 
@@ -103,10 +100,7 @@ public class QuestionResourceIT {
     public static Question createUpdatedEntity() {
         Question question = new Question();
         question.setCourseId(UPDATED_COURSEID);
-        question.setType(UPDATED_TYPE);
         question.setQuestion(UPDATED_QUESTION);
-        question.setChoices(UPDATED_CHOICES);
-        question.setSolution(UPDATED_SOLUTION);
         return question;
     }
 
@@ -131,10 +125,7 @@ public class QuestionResourceIT {
         assertThat(QuestionList).hasSize(databaseSizeBeforeCreate + 1);
         Question testQuestion = QuestionList.get(QuestionList.size() - 1);
         assertThat(testQuestion.getCourseId()).isEqualTo(DEFAULT_COURSEID);
-        assertThat(testQuestion.getType()).isEqualTo(DEFAULT_TYPE);
         assertThat(testQuestion.getQuestion()).isEqualTo(DEFAULT_QUESTION);
-        assertThat(testQuestion.getChoices()).isEqualTo(DEFAULT_CHOICES);
-        assertThat(testQuestion.getSolution()).isEqualTo(DEFAULT_SOLUTION);
     }
 
     @Test
@@ -168,9 +159,7 @@ public class QuestionResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(question.getId().toString())))
             .andExpect(jsonPath("$.[*].courseId").value(hasItem(DEFAULT_COURSEID.toString())))
-            .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE.toString())))
-            .andExpect(jsonPath("$.[*].question").value(hasItem(DEFAULT_QUESTION.toString())))
-            .andExpect(jsonPath("$.[*].solution").value(hasItem(DEFAULT_SOLUTION)));
+            .andExpect(jsonPath("$.[*].question").value(hasItem(DEFAULT_QUESTION.toString())));
     }
 
     @Test
@@ -184,9 +173,7 @@ public class QuestionResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(question.getId().toString()))
             .andExpect(jsonPath("$.courseId").value(DEFAULT_COURSEID.toString()))
-            .andExpect(jsonPath("$.type").value(DEFAULT_TYPE.toString()))
-            .andExpect(jsonPath("$.question").value(DEFAULT_QUESTION))
-            .andExpect(jsonPath("$.solution").value(DEFAULT_SOLUTION));
+            .andExpect(jsonPath("$.question").value(DEFAULT_QUESTION));
     }
 
     @Test
@@ -206,10 +193,7 @@ public class QuestionResourceIT {
         // Update the Question
         Question updatedQuestion = questionRepository.findById(question.getId()).get();
         updatedQuestion.setCourseId(UPDATED_COURSEID);
-        updatedQuestion.setType(UPDATED_TYPE);
         updatedQuestion.setQuestion(UPDATED_QUESTION);
-        updatedQuestion.setChoices(UPDATED_CHOICES);
-        updatedQuestion.setSolution(UPDATED_SOLUTION);
         QuestionDTO QuestionDTO = questionMapper.toDto(updatedQuestion);
 
         restQuestionMockMvc.perform(put("/api/questions").with(csrf())
@@ -222,10 +206,7 @@ public class QuestionResourceIT {
         assertThat(QuestionList).hasSize(databaseSizeBeforeUpdate);
         Question testQuestion = QuestionList.get(QuestionList.size() - 1);
         assertThat(testQuestion.getCourseId()).isEqualTo(UPDATED_COURSEID);
-        assertThat(testQuestion.getType()).isEqualTo(UPDATED_TYPE);
         assertThat(testQuestion.getQuestion()).isEqualTo(UPDATED_QUESTION);
-        assertThat(testQuestion.getChoices()).isEqualTo(UPDATED_CHOICES);
-        assertThat(testQuestion.getSolution()).isEqualTo(UPDATED_SOLUTION);
     }
 
     @Test
