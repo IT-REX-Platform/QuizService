@@ -1,7 +1,5 @@
 package de.uni_stuttgart.it_rex.quiz.service.dto.written_dtos;
 
-import de.uni_stuttgart.it_rex.quiz.domain.enumeration.QUESTIONTYPE;
-
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.Set;
@@ -10,8 +8,7 @@ import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
-
-// SINGLE_CHOICE, MULTIPLE_CHOICE, NUMERIC
+import de.uni_stuttgart.it_rex.quiz.service.mapper.written.QuestionMapper;
 
 @JsonTypeInfo(
   use = JsonTypeInfo.Id.NAME, 

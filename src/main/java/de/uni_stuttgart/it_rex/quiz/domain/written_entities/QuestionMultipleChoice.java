@@ -42,7 +42,6 @@ public class QuestionMultipleChoice extends Question {
         return "QuestionMultipleChoice{" +
             "id=" + getId() +
             ", courseId=" + getCourseId() +
-            // ", type=" + getType() +
             ", quizIds=" + getQuizIds() +
             ", question='" + getQuestion() + '\'' +
             ", choices=" + choices +

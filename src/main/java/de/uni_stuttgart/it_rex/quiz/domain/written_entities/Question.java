@@ -1,6 +1,5 @@
 package de.uni_stuttgart.it_rex.quiz.domain.written_entities;
 
-import de.uni_stuttgart.it_rex.quiz.domain.enumeration.QUESTIONTYPE;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -9,7 +8,6 @@ import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.io.Serializable;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
