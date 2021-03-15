@@ -42,7 +42,6 @@ public class QuestionSingleChoice extends Question {
         return "QuestionSingleChoice{" +
             "id=" + getId() +
             ", courseId=" + getCourseId() +
-            // ", type=" + getType() +
             ", question='" + getQuestion() + '\'' +
             ", quizIds=" + getQuizIds() +
             ", choices=" + choices +
