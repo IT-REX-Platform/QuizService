@@ -46,17 +46,23 @@ public class QuizService {
     public QuizDTO save(final QuizDTO quizDTO) {
         log.debug("Request to save Quiz : {}", quizDTO);
 
-        // create questions
-        quizDTO.setQuestions(questionService.save(quizDTO.getQuestions()));
+        // if new create quiz
+        Quiz quiz = quizMapper.toEntityWithoutQuestions(quizDTO);
+        if (quiz.isNew()) {
+            quiz = quizRepository.save(quiz);
+        }
 
-        // create quiz
-        Quiz quiz = quizMapper.toEntity(quizDTO);
-        quiz = quizRepository.save(quiz);
+        // get questions from mapper
+        quiz.setQuestions(quizMapper.toEntity(quizDTO).getQuestions());
 
-        // add questions
-        // todo: inefficient: avoid saving questions twice!
+        // add references
         quiz.addQuestions(quiz.getQuestions());
+
+        // save questions
         questionService.saveEntities(quiz.getQuestions().stream().collect(Collectors.toCollection(LinkedList::new)));
+
+        // save quiz
+        quiz = quizRepository.save(quiz);
 
         return quizMapper.toDto(quiz);
     }
