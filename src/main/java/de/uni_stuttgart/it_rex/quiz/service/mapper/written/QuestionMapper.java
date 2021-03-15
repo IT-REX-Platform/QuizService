@@ -3,7 +3,6 @@ package de.uni_stuttgart.it_rex.quiz.service.mapper.written;
 
 import de.uni_stuttgart.it_rex.quiz.domain.written_entities.Question;
 import de.uni_stuttgart.it_rex.quiz.service.dto.written_dtos.QuestionDTO;
-import de.uni_stuttgart.it_rex.quiz.service.mapper.EntityMapper;
 
 import de.uni_stuttgart.it_rex.quiz.domain.written_entities.QuestionMultipleChoice;
 import de.uni_stuttgart.it_rex.quiz.domain.written_entities.QuestionNumeric;

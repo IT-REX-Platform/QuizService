@@ -8,8 +8,6 @@ import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
-import de.uni_stuttgart.it_rex.quiz.service.mapper.written.QuestionMapper;
-
 @JsonTypeInfo(
   use = JsonTypeInfo.Id.NAME, 
   include = JsonTypeInfo.As.PROPERTY, 
