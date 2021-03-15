@@ -2,7 +2,6 @@ package de.uni_stuttgart.it_rex.quiz.web.rest.written;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -116,6 +115,17 @@ public class QuizResource {
     }
 
     /**
+     * {@code GET  /quizzes} : get all the quizzes.
+     *
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of quizzes in body.
+     */
+    @GetMapping(value="/quizzes", params="course_id")
+    public List<QuizDTO> getCourseQuizzes(@RequestParam("course_id") final UUID courseId) {
+        log.debug("REST request to get all Quizzes");
+        return quizService.findByCourseId(courseId);
+    }
+
+    /**
      * {@code GET  /quizzes/:id} : get the "id" quiz.
      *
      * @param id the id of the QuizDTO to retrieve.
@@ -135,10 +145,13 @@ public class QuizResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/quizzes/{id}")
-    public ResponseEntity<Void> deletequiz(@PathVariable final UUID id) {
+    public ResponseEntity<Void> deleteQuiz(@PathVariable final UUID id,
+            @RequestParam(value = "with_questions", required = false, defaultValue = "false") final boolean withQuestions) {
         log.debug("REST request to delete quiz : {}", id);
-        quizService.delete(id);
-        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
+        quizService.delete(id, withQuestions);
+        return ResponseEntity.noContent()
+                .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
+                .build();
     }
 
 }
