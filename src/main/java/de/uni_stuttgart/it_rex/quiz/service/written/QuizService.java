@@ -52,11 +52,8 @@ public class QuizService {
             quiz = quizRepository.save(quiz);
         }
 
-        // get questions from mapper
-        quiz.setQuestions(quizMapper.toEntity(quizDTO).getQuestions());
-
-        // add references
-        quiz.addQuestions(quiz.getQuestions());
+        // add questions
+        quiz.addQuestions(quizMapper.toEntity(quizDTO).getQuestions());
 
         // save questions
         questionService.saveEntities(quiz.getQuestions().stream().collect(Collectors.toCollection(LinkedList::new)));
