@@ -65,11 +65,10 @@ pipeline {
             }
             steps {
                 echo 'Deploying....'
-                sh './gradlew jibBuildTar'
-                sh 'mkdir -p /srv/Backend/quizservice'
-                sh 'rm -rf /srv/Backend/quizservice/*'
-                sh 'cd ./build && mv jib-image.tar /srv/Backend/quizservice/quizservice.tar'
-                sh 'touch /srv/Backend/quizservice/deploy'
+                dir('docker') {
+                    sh 'docker-compose down'
+                    sh 'docker-compose up -d --build'
+                }
             }
         }
 
