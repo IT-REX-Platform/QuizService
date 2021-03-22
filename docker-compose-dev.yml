@@ -15,21 +15,23 @@ services:
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=internal
       - JHIPSTER_SLEEP=5
       - JHIPSTER_REGISTRY_PASSWORD=admin
+    restart: always
     depends_on:
       - quizservice-mongodb
     networks:
       - it-rex
-      - default
 
   quizservice-mongodb:
     image: mongo:4.2.7
+    restart: always
     ports:
       - 27017:27017
     networks:
-      - default
+      - it-rex
 
   mongo-express:
     image: mongo-express
+    restart: always
     ports:
       - 8090:8081
     environment:
@@ -37,7 +39,7 @@ services:
     #   ME_CONFIG_MONGODB_ADMINUSERNAME: root
     #   ME_CONFIG_MONGODB_ADMINPASSWORD: example
     networks:
-      - default
+      - it-rex
 
 networks:
   it-rex:
