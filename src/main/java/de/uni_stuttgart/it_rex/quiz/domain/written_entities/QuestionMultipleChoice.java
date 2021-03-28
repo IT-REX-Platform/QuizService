@@ -43,7 +43,7 @@ public class QuestionMultipleChoice extends Question {
             "id=" + getId() +
             ", courseId=" + getCourseId() +
             ", quizIds=" + getQuizIds() +
-            ", question='" + getQuestion() + '\'' +
+            ", question='" + getQuestionText() + '\'' +
             ", choices=" + choices +
             ", solution=" + solution +
             '}';

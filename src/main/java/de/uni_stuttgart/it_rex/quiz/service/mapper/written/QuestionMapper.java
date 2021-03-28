@@ -59,8 +59,10 @@ public interface QuestionMapper {
     // Question Base Mappings
     @Mapping(target = "removeQuiz", ignore = true)
     @Mapping(target = "removeQuizzes", ignore = true)
+    @Mapping(target = "questionText", source = "question")
     Question baseToEntity(QuestionDTO dto);
-
+    
+    @Mapping(target = "question", source = "questionText")
     QuestionDTO baseToDto(Question entity);
 
     // ----- Question Specific Mappings -----

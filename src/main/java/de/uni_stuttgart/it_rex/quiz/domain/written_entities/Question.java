@@ -30,7 +30,7 @@ public class Question implements Serializable {
     private UUID courseId;
 
     @Field
-    private String question;
+    private String questionText;
 
     @Field
     private Set<UUID> quizIds = new HashSet<>();
@@ -55,12 +55,12 @@ public class Question implements Serializable {
         this.courseId = courseId;
     }
 
-    public String getQuestion() {
-        return question;
+    public String getQuestionText() {
+        return questionText;
     }
 
-    public void setQuestion(String question) {
-        this.question = question;
+    public void setQuestionText(String questionText) {
+        this.questionText = questionText;
     }
 
     public Set<UUID> getQuizIds() {
@@ -112,7 +112,7 @@ public class Question implements Serializable {
     public String toString() {
         return "Question{" +
             "id=" + id +
-            ", question=" + question +
+            ", question=" + questionText +
             ", quizzes=" + quizIds +
             '}';
     }
