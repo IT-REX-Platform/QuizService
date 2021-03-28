@@ -3,8 +3,10 @@ package de.uni_stuttgart.it_rex.quiz.web.rest.written;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import de.uni_stuttgart.it_rex.quiz.service.written.QuizService;
 import org.slf4j.Logger;
@@ -115,14 +117,28 @@ public class QuizResource {
     }
 
     /**
-     * {@code GET  /quizzes} : get all the quizzes.
+     * {@code GET  /quizzes} : get all the quizzes of a course.
      *
+     * @param courseId the course id
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of quizzes in body.
      */
     @GetMapping(value="/quizzes", params="course_id")
     public List<QuizDTO> getCourseQuizzes(@RequestParam("course_id") final UUID courseId) {
         log.debug("REST request to get all Quizzes");
         return quizService.findByCourseId(courseId);
+    }
+
+    /**
+     * {@code GET  /quizzes} : get quizzes by ids.
+     *
+     * @param quizIds Quiz Ids as comma separated list.
+     * @return the map of quizzes in the body.
+     */
+    @GetMapping(value="/quizzes", params="quiz_ids")
+    public Map<UUID, QuizDTO> findAllByIds(@RequestParam("quiz_ids") final List<UUID> quizIds) {
+        log.info("REST request to get all quizzes by ids: {}", quizIds);
+        final List<QuizDTO> quizzes = quizService.findByIdIn(quizIds);
+        return quizzes.stream().collect(Collectors.toMap(QuizDTO::getId, quiz -> quiz));
     }
 
     /**
