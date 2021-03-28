@@ -137,7 +137,7 @@ public class QuestionResource {
     public Map<UUID, QuestionDTO> findAllByIds(@RequestParam("question_ids") final List<UUID> questionIds) {
         log.info("REST request to get all questions by ids: {}", questionIds);
         final List<QuestionDTO> questions = questionService.findByIdIn(questionIds);
-        return questions.stream().collect(Collectors.toMap(QuestionDTO::getId, quiz -> quiz));
+        return questions.stream().collect(Collectors.toMap(QuestionDTO::getId, question -> question));
     }
 
     /**
