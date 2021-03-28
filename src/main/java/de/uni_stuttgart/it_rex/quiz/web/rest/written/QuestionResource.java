@@ -3,8 +3,10 @@ package de.uni_stuttgart.it_rex.quiz.web.rest.written;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -123,6 +125,19 @@ public class QuestionResource {
     public List<QuestionDTO> getCourseQuestions(@RequestParam("course_id") final UUID courseId) {
         log.debug("REST request to get Course Questions");
         return questionService.findAll(courseId);
+    }
+
+    /**
+     * {@code GET  /questions} : get all the questions by ids.
+     *
+     * @param questionIds Questions Ids as comma separated list.
+     * @return the map of questions in the body.
+     */
+    @GetMapping(value="/questions", params="question_ids")
+    public Map<UUID, QuestionDTO> findAllByIds(@RequestParam("question_ids") final List<UUID> questionIds) {
+        log.info("REST request to get all questions by ids: {}", questionIds);
+        final List<QuestionDTO> questions = questionService.findByIdIn(questionIds);
+        return questions.stream().collect(Collectors.toMap(QuestionDTO::getId, quiz -> quiz));
     }
 
     /**

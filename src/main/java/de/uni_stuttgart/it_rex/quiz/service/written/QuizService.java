@@ -77,6 +77,18 @@ public class QuizService {
     }
 
     /**
+     * Get Quizzes by list of Quiz ids.
+     *
+     * @param ids the Quiz ids
+     * @return the list of entities.
+     */
+    public List<QuizDTO> findByIdIn(final List<UUID> ids) {
+        log.debug("Request to get List of Quizzes : {}", ids);
+        return quizRepository.findByIdIn(ids).stream().map(quizMapper::toDto)
+                .collect(Collectors.toCollection(LinkedList::new));
+    }
+
+    /**
      * Get all the Quizzes.
      *
      * @return the list of entities.
