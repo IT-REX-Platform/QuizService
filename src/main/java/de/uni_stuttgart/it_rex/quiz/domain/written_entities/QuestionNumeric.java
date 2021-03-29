@@ -29,7 +29,7 @@ public class QuestionNumeric extends Question {
         return "QuestionNumeric{" +
             "id=" + getId() +
             ", courseId=" + getCourseId() +
-            ", question='" + getQuestion() + '\'' +
+            ", question='" + getQuestionText() + '\'' +
             ", quizIds=" + getQuizIds() +
             ", solution=" + solution +
             '}';

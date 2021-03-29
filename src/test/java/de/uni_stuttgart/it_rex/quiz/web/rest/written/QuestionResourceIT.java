@@ -87,7 +87,7 @@ public class QuestionResourceIT {
     public static Question createEntity() {
         Question question = new Question();
         question.setCourseId(DEFAULT_COURSEID);
-        question.setQuestion(DEFAULT_QUESTION);
+        question.setQuestionText(DEFAULT_QUESTION);
         return question;
     }
 
@@ -100,7 +100,7 @@ public class QuestionResourceIT {
     public static Question createUpdatedEntity() {
         Question question = new Question();
         question.setCourseId(UPDATED_COURSEID);
-        question.setQuestion(UPDATED_QUESTION);
+        question.setQuestionText(UPDATED_QUESTION);
         return question;
     }
 
@@ -125,7 +125,7 @@ public class QuestionResourceIT {
         assertThat(QuestionList).hasSize(databaseSizeBeforeCreate + 1);
         Question testQuestion = QuestionList.get(QuestionList.size() - 1);
         assertThat(testQuestion.getCourseId()).isEqualTo(DEFAULT_COURSEID);
-        assertThat(testQuestion.getQuestion()).isEqualTo(DEFAULT_QUESTION);
+        assertThat(testQuestion.getQuestionText()).isEqualTo(DEFAULT_QUESTION);
     }
 
     @Test
@@ -193,7 +193,7 @@ public class QuestionResourceIT {
         // Update the Question
         Question updatedQuestion = questionRepository.findById(question.getId()).get();
         updatedQuestion.setCourseId(UPDATED_COURSEID);
-        updatedQuestion.setQuestion(UPDATED_QUESTION);
+        updatedQuestion.setQuestionText(UPDATED_QUESTION);
         QuestionDTO QuestionDTO = questionMapper.toDto(updatedQuestion);
 
         restQuestionMockMvc.perform(put("/api/questions").with(csrf())
@@ -206,7 +206,7 @@ public class QuestionResourceIT {
         assertThat(QuestionList).hasSize(databaseSizeBeforeUpdate);
         Question testQuestion = QuestionList.get(QuestionList.size() - 1);
         assertThat(testQuestion.getCourseId()).isEqualTo(UPDATED_COURSEID);
-        assertThat(testQuestion.getQuestion()).isEqualTo(UPDATED_QUESTION);
+        assertThat(testQuestion.getQuestionText()).isEqualTo(UPDATED_QUESTION);
     }
 
     @Test
