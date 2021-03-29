@@ -128,13 +128,13 @@ public class QuestionResource {
     }
 
     /**
-     * {@code GET  /questions} : get all the questions by ids.
+     * {@code GET  /questions/ids} : get questions by ids.
      *
-     * @param questionIds Questions Ids as comma separated list.
+     * @param questionIds the Questions Ids.
      * @return the map of questions in the body.
      */
-    @GetMapping(value="/questions", params="question_ids")
-    public Map<UUID, QuestionDTO> findAllByIds(@RequestParam("question_ids") final List<UUID> questionIds) {
+    @GetMapping(value="/questions/ids")
+    public Map<UUID, QuestionDTO> findAllByIds(@RequestBody final List<UUID> questionIds) {
         log.info("REST request to get all questions by ids: {}", questionIds);
         final List<QuestionDTO> questions = questionService.findByIdIn(questionIds);
         return questions.stream().collect(Collectors.toMap(QuestionDTO::getId, question -> question));

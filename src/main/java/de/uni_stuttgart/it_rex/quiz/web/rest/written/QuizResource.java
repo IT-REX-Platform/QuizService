@@ -129,13 +129,13 @@ public class QuizResource {
     }
 
     /**
-     * {@code GET  /quizzes} : get quizzes by ids.
+     * {@code GET  /quizzes/ids} : get quizzes by ids.
      *
-     * @param quizIds Quiz Ids as comma separated list.
+     * @param quizIds the Quiz Ids.
      * @return the map of quizzes in the body.
      */
-    @GetMapping(value="/quizzes", params="quiz_ids")
-    public Map<UUID, QuizDTO> findAllByIds(@RequestParam("quiz_ids") final List<UUID> quizIds) {
+    @GetMapping(value="/quizzes/ids")
+    public Map<UUID, QuizDTO> findAllByIds(@RequestBody final List<UUID> quizIds) {
         log.info("REST request to get all quizzes by ids: {}", quizIds);
         final List<QuizDTO> quizzes = quizService.findByIdIn(quizIds);
         return quizzes.stream().collect(Collectors.toMap(QuizDTO::getId, quiz -> quiz));
