@@ -71,27 +71,23 @@ public class Question implements Serializable {
         this.quizIds = quizIds;
     }
 
-    public Question addQuiz(Quiz quiz) {
-        this.quizIds.add(quiz.getId());
-        quiz.getQuestions().add(this);
+    public Question addQuizId(UUID quizId) {
+        this.quizIds.add(quizId);
         return this;
     }
 
-    public Question addQuizzes(Set<Quiz> quizzes) {
-        this.quizIds.addAll(quizzes.stream().map(Quiz::getId).collect(Collectors.toList()));
-        quizzes.forEach(o -> o.getQuestions().add(this));
+    public Question addQuizIds(Set<UUID> quizIds) {
+        this.quizIds.addAll(quizIds);
         return this;
     }
 
-    public Question removeQuiz(Quiz quiz) {
-        this.quizIds.remove(quiz.getId());
-        quiz.getQuestions().remove(this);
+    public Question removeQuizId(UUID quizId) {
+        this.quizIds.remove(quizId);
         return this;
     }
 
-    public Question removeQuizzes(Set<Quiz> quizzes) {
-        this.quizIds.removeAll(quizzes.stream().map(Quiz::getId).collect(Collectors.toList()));
-        quizzes.forEach(o -> o.getQuestions().add(this));
+    public Question removeQuizIds(Set<UUID> quizIds) {
+        this.quizIds.removeAll(quizIds);
         return this;
     }
 

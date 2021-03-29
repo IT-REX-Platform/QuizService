@@ -57,8 +57,8 @@ public interface QuestionMapper {
     List<QuestionDTO> toDto(List<Question> entityList);
 
     // Question Base Mappings
-    @Mapping(target = "removeQuiz", ignore = true)
-    @Mapping(target = "removeQuizzes", ignore = true)
+    @Mapping(target = "removeQuizId", ignore = true)
+    @Mapping(target = "removeQuizIds", ignore = true)
     @Mapping(target = "questionText", source = "question")
     Question baseToEntity(QuestionDTO dto);
     
