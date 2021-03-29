@@ -16,24 +16,24 @@ public class QuestionSingleChoice extends Question {
     private static final long serialVersionUID = 1L;
 
     @Field
-    private Map<String, String> choices;
+    private Map<Integer, String> choices;
 
     @Field
-    private String solution;
+    private Integer solution;
 
-    public Map<String, String> getChoices() {
+    public Map<Integer, String> getChoices() {
         return choices;
     }
 
-    public void setChoices(Map<String, String> choices) {
+    public void setChoices(Map<Integer, String> choices) {
         this.choices = choices;
     }
 
-    public String getSolution() {
+    public Integer getSolution() {
         return solution;
     }
 
-    public void setSolution(String solution) {
+    public void setSolution(Integer solution) {
         this.solution = solution;
     }
 
