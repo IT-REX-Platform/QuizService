@@ -66,7 +66,7 @@ public class QuizService {
             Set<Question> qsOld = questionsDb.stream().collect(Collectors.toSet());
             qsOld.removeAll(qsNew);
             qsOld.forEach(o -> o.removeQuizId(quizDb.getId()));
-            questionService.saveEntities(quizDb.getQuestions());
+            questionService.saveEntities(qsOld.stream().collect(Collectors.toCollection(LinkedList::new)));
         }
 
         // add questions
