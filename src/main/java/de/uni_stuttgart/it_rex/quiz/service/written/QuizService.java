@@ -106,8 +106,9 @@ public class QuizService {
     }
 
     /**
-     * Get all the Quizzes.
+     * Get all Quizzes of a Course.
      *
+     * @param courseId the Course Id
      * @return the list of entities.
      */
     public List<QuizDTO> findByCourseId(final UUID courseId) {
@@ -152,6 +153,7 @@ public class QuizService {
      * Delete the Quiz by id.
      *
      * @param id the id of the entity.
+     * @param withQuestions if {@code true} deletes also the contained questions
      */
     public void delete(final UUID id, boolean withQuestions) {
         log.debug("Request to delete Quiz with Questions: {}", id);
