@@ -7,7 +7,10 @@ import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 
 /**
  * A Quiz.
@@ -29,7 +32,7 @@ public class Quiz implements Serializable {
 
     @DBRef(lazy = true)
     @Field
-    private Set<Question> questions = new HashSet<>();
+    private List<Question> questions = new LinkedList<>();
 
     public boolean isNew() {
         return (getId() == null);
@@ -59,11 +62,11 @@ public class Quiz implements Serializable {
         this.name = name;
     }
 
-    public Set<Question> getQuestions() {
+    public List<Question> getQuestions() {
         return questions;
     }
 
-    public void setQuestions(Set<Question> questions) {
+    public void setQuestions(List<Question> questions) {
         this.questions = questions;
     }
 
@@ -73,7 +76,7 @@ public class Quiz implements Serializable {
         return this;
     }
 
-    public Quiz addQuestions(Set<Question> questions) {
+    public Quiz addQuestions(List<Question> questions) {
         this.questions.addAll(questions);
         questions.forEach(o -> o.getQuizIds().add(this.getId()));
         return this;
@@ -85,7 +88,7 @@ public class Quiz implements Serializable {
         return this;
     }
 
-    public Quiz removeQuestions(Set<Question> questions) {
+    public Quiz removeQuestions(List<Question> questions) {
         this.questions.removeAll(questions);
         questions.forEach(o -> o.getQuizIds().remove(this.getId()));
         return this;

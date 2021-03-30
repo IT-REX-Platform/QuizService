@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -48,15 +49,31 @@ public class QuizService {
 
         // if new create quiz
         Quiz quiz = quizMapper.toEntityWithoutQuestions(quizDTO);
+        Optional<Quiz> quizDbOpt = Optional.empty();
         if (quiz.isNew()) {
             quiz = quizRepository.save(quiz);
         }
+        else {
+            quizDbOpt = quizRepository.findById(quiz.getId());
+        }
+
+        // remove ids from previously contained questions
+        List<Question> questions = quizMapper.toEntity(quizDTO).getQuestions();
+        if (quizDbOpt.isPresent()) {
+            Quiz quizDb = quizDbOpt.get();
+            List<Question> questionsDb = quizDb.getQuestions();
+            Set<Question> qsNew = questions.stream().collect(Collectors.toSet());
+            Set<Question> qsOld = questionsDb.stream().collect(Collectors.toSet());
+            qsOld.removeAll(qsNew);
+            qsOld.forEach(o -> o.removeQuizId(quizDb.getId()));
+            questionService.saveEntities(qsOld.stream().collect(Collectors.toCollection(LinkedList::new)));
+        }
 
         // add questions
-        quiz.addQuestions(quizMapper.toEntity(quizDTO).getQuestions());
+        quiz.addQuestions(questions);
 
         // save questions
-        questionService.saveEntities(quiz.getQuestions().stream().collect(Collectors.toCollection(LinkedList::new)));
+        questionService.saveEntities(quiz.getQuestions());
 
         // save quiz
         quiz = quizRepository.save(quiz);

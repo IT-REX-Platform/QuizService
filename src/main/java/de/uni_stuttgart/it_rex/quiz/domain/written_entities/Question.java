@@ -30,7 +30,7 @@ public class Question implements Serializable {
     private UUID courseId;
 
     @Field
-    private String question;
+    private String questionText;
 
     @Field
     private Set<UUID> quizIds = new HashSet<>();
@@ -55,12 +55,12 @@ public class Question implements Serializable {
         this.courseId = courseId;
     }
 
-    public String getQuestion() {
-        return question;
+    public String getQuestionText() {
+        return questionText;
     }
 
-    public void setQuestion(String question) {
-        this.question = question;
+    public void setQuestionText(String questionText) {
+        this.questionText = questionText;
     }
 
     public Set<UUID> getQuizIds() {
@@ -71,27 +71,23 @@ public class Question implements Serializable {
         this.quizIds = quizIds;
     }
 
-    public Question addQuiz(Quiz quiz) {
-        this.quizIds.add(quiz.getId());
-        quiz.getQuestions().add(this);
+    public Question addQuizId(UUID quizId) {
+        this.quizIds.add(quizId);
         return this;
     }
 
-    public Question addQuizzes(Set<Quiz> quizzes) {
-        this.quizIds.addAll(quizzes.stream().map(Quiz::getId).collect(Collectors.toList()));
-        quizzes.forEach(o -> o.getQuestions().add(this));
+    public Question addQuizIds(Set<UUID> quizIds) {
+        this.quizIds.addAll(quizIds);
         return this;
     }
 
-    public Question removeQuiz(Quiz quiz) {
-        this.quizIds.remove(quiz.getId());
-        quiz.getQuestions().remove(this);
+    public Question removeQuizId(UUID quizId) {
+        this.quizIds.remove(quizId);
         return this;
     }
 
-    public Question removeQuizzes(Set<Quiz> quizzes) {
-        this.quizIds.removeAll(quizzes.stream().map(Quiz::getId).collect(Collectors.toList()));
-        quizzes.forEach(o -> o.getQuestions().add(this));
+    public Question removeQuizIds(Set<UUID> quizIds) {
+        this.quizIds.removeAll(quizIds);
         return this;
     }
 
@@ -112,7 +108,7 @@ public class Question implements Serializable {
     public String toString() {
         return "Question{" +
             "id=" + id +
-            ", question=" + question +
+            ", question=" + questionText +
             ", quizzes=" + quizIds +
             '}';
     }

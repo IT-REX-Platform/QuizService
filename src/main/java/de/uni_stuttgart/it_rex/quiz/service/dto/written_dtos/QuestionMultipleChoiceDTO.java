@@ -4,23 +4,23 @@ import java.util.Map;
 
 public class QuestionMultipleChoiceDTO extends QuestionDTO {
 
-    private Map<String, String> choices;
+    private Map<Integer, String> choices;
 
-    private Map<String, Boolean> solution;
+    private Map<Integer, Boolean> solution;
 
-    public Map<String, String> getChoices() {
+    public Map<Integer, String> getChoices() {
         return choices;
     }
 
-    public void setChoices(Map<String, String> choices) {
+    public void setChoices(Map<Integer, String> choices) {
         this.choices = choices;
     }
 
-    public Map<String, Boolean> getSolution() {
+    public Map<Integer, Boolean> getSolution() {
         return solution;
     }
 
-    public void setSolution(Map<String, Boolean> solution) {
+    public void setSolution(Map<Integer, Boolean> solution) {
         this.solution = solution;
     }
 
