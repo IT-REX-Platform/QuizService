@@ -129,13 +129,19 @@ public class QuizResource {
     }
 
     /**
-     * {@code GET  /quizzes} : get quizzes by ids.
+     * {@code POST  /quizzes/get/ids} : get quizzes by ids.
+     * 
+     * This is actually a {@code GET} request.
+     * The ids need to be in the request body, because the practical URI length limit is around 2000 chars.
+     * With UUIDs this would imply an upper limit of about 50 ids.
+     * {@code POST} is used, because the frontend cannot send a body in a get request.
+     * ¯\_(ツ)_/¯
      *
-     * @param quizIds Quiz Ids as comma separated list.
+     * @param quizIds the Quiz Ids.
      * @return the map of quizzes in the body.
      */
-    @GetMapping(value="/quizzes", params="quiz_ids")
-    public Map<UUID, QuizDTO> findAllByIds(@RequestParam("quiz_ids") final List<UUID> quizIds) {
+    @PostMapping(value="/quizzes/get/ids")
+    public Map<UUID, QuizDTO> findAllByIds(@RequestBody final List<UUID> quizIds) {
         log.info("REST request to get all quizzes by ids: {}", quizIds);
         final List<QuizDTO> quizzes = quizService.findByIdIn(quizIds);
         return quizzes.stream().collect(Collectors.toMap(QuizDTO::getId, quiz -> quiz));

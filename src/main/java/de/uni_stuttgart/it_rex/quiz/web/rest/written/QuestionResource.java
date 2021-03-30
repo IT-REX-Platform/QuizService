@@ -128,13 +128,19 @@ public class QuestionResource {
     }
 
     /**
-     * {@code GET  /questions} : get all the questions by ids.
+     * {@code POST  /questions/get/ids} : get questions by ids.
      *
-     * @param questionIds Questions Ids as comma separated list.
+     * This is actually a {@code GET} request.
+     * The ids need to be in the request body, because the practical URI length limit is around 2000 chars.
+     * With UUIDs this would imply an upper limit of about 50 ids.
+     * {@code POST} is used, because the frontend cannot send a body in a get request.
+     * ¯\_(ツ)_/¯
+     * 
+     * @param questionIds the Questions Ids.
      * @return the map of questions in the body.
      */
-    @GetMapping(value="/questions", params="question_ids")
-    public Map<UUID, QuestionDTO> findAllByIds(@RequestParam("question_ids") final List<UUID> questionIds) {
+    @PostMapping(value="/questions/get/ids")
+    public Map<UUID, QuestionDTO> findAllByIds(@RequestBody final List<UUID> questionIds) {
         log.info("REST request to get all questions by ids: {}", questionIds);
         final List<QuestionDTO> questions = questionService.findByIdIn(questionIds);
         return questions.stream().collect(Collectors.toMap(QuestionDTO::getId, question -> question));
