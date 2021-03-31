@@ -58,7 +58,7 @@ public class QuestionService {
     }
 
     /**
-     * Save a Question.
+     * Save Questions.
      *
      * @param QuestionDTO the entity to save.
      * @return the persisted entity.
@@ -93,7 +93,7 @@ public class QuestionService {
     }
 
     /**
-     * Save a Question.
+     * Save Questions.
      *
      * @param Question the entity to save.
      * @return the persisted entity.
@@ -128,14 +128,26 @@ public class QuestionService {
     }
 
     /**
-     * Get all the Questions.
+     * Get Questions by ids.
      *
+     * @param ids ids of questions
      * @return the list of entities.
      */
     public List<QuestionDTO> findByIdIn(final List<UUID> ids) {
         log.debug("Request to get List of Questions : {}", ids);
         return questionRepository.findByIdIn(ids).stream().map(questionMapper::toDto)
                 .collect(Collectors.toCollection(LinkedList::new));
+    }
+
+    /**
+     * Get Questions by ids.
+     *
+     * @param ids ids of questions
+     * @return the list of entities.
+     */
+    public List<Question> findEntitiesByIdIn(final List<UUID> ids) {
+        log.debug("Request to get List of Questions : {}", ids);
+        return questionRepository.findByIdIn(ids);
     }
 
     /**
@@ -156,16 +168,47 @@ public class QuestionService {
      */
     public void delete(final UUID id) {
         log.debug("Request to delete Question : {}", id);
-        questionRepository.deleteById(id);
+        Optional<Question> questionOpt = questionRepository.findById(id);
+        if (questionOpt.isPresent())
+        {
+            deleteEntity(questionOpt.get());
+        }
     }
 
     /**
-     * Delete the all Questions by id.
+     * Delete Questions by id.
      *
      * @param ids the ids of the Questions.
      */
     public void deleteByIdIn(final List<UUID> ids) {
-        log.debug("Request to delete all Questions : {}", ids);
-        questionRepository.deleteByIdIn(ids);
+        log.debug("Request to delete Questions : {}", ids);
+        List<Question> qsDb = questionRepository.findByIdIn(ids);
+        deleteEntities(qsDb);
+    }
+
+    /**
+     * delete a Question.
+     *
+     * @param Question the entity to save.
+     * @return the persisted entity.
+     */
+    public void deleteEntity(final Question question) {
+        log.debug("Request to delete Question : {}", question);
+        if (question.getQuizIds().isEmpty())
+        {
+            questionRepository.delete(question);
+        }
+    }
+
+    /**
+     * delete Questions.
+     * 
+     * @param Question the entity to delete.
+     * @return the persisted entity.
+     */
+    public void deleteEntities(final List<Question> questions) {
+        log.debug("Request to delete Questions : {}", questions);
+        List<Question> qsToDelete = questions.stream().filter(o -> o.getQuizIds().isEmpty()).collect(Collectors.toCollection(LinkedList::new));
+        questionRepository.deleteAll(qsToDelete);
     }
 }

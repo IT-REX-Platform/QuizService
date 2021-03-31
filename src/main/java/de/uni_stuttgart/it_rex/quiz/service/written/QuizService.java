@@ -10,8 +10,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -57,23 +59,34 @@ public class QuizService {
             quizDbOpt = quizRepository.findById(quiz.getId());
         }
 
-        // remove ids from previously contained questions
+        // remove quiz ids from previously contained questions
         List<Question> questions = quizMapper.toEntity(quizDTO).getQuestions();
         if (quizDbOpt.isPresent()) {
             Quiz quizDb = quizDbOpt.get();
-            List<Question> questionsDb = quizDb.getQuestions();
-            Set<Question> qsNew = questions.stream().collect(Collectors.toSet());
-            Set<Question> qsOld = questionsDb.stream().collect(Collectors.toSet());
-            qsOld.removeAll(qsNew);
-            qsOld.forEach(o -> o.removeQuizId(quizDb.getId()));
-            questionService.saveEntities(qsOld.stream().collect(Collectors.toCollection(LinkedList::new)));
+            List<Question> questionssDb = quizDb.getQuestions();
+            Set<Question> questionsNew = questions.stream().collect(Collectors.toSet());
+            Set<Question> questionsOld = questionssDb.stream().collect(Collectors.toSet());
+            questionsOld.removeAll(questionsNew);
+            questionsOld.forEach(o -> o.removeQuizId(quizDb.getId()));
+            questionService.saveEntities(questionsOld.stream().collect(Collectors.toCollection(LinkedList::new)));
         }
+
+        // get quiz ids from questions
+        List<Question> questionsDb = questionService.findEntitiesByIdIn(questions.stream().map(Question::getId).collect(Collectors.toCollection(LinkedList::new)));
+        Map<UUID, Question> questionMap = questionsDb.stream().collect(Collectors.toMap(Question::getId, question -> question));
+        questions.forEach(question -> {
+            Optional<Question> questionOpt = Optional.ofNullable(questionMap.get(question.getId()));
+            if (questionOpt.isPresent())
+            {
+                question.getQuizIds().addAll(questionOpt.get().getQuizIds());
+            }
+        });
 
         // add questions
         quiz.addQuestions(questions);
 
         // save questions
-        questionService.saveEntities(quiz.getQuestions());
+        questionService.saveEntities(questions);
 
         // save quiz
         quiz = quizRepository.save(quiz);
@@ -131,21 +144,44 @@ public class QuizService {
 
     /**
      * Delete the Quiz by id.
+     * Also removes the quiz id from the contained questions.
      *
      * @param id the id of the entity.
      */
     public void delete(final UUID id) {
         log.debug("Request to delete Quiz : {}", id);
+
+        Optional<Quiz> quizDbOpt = quizRepository.findById(id);
+        // remove quiz id in contained questions
+        if (quizDbOpt.isPresent()) {
+            Quiz quizDb = quizDbOpt.get();
+            List<Question> questionsDb = quizDb.getQuestions();
+            questionsDb.forEach(o -> o.removeQuizId(quizDb.getId()));
+            questionService.saveEntities(questionsDb);
+        }
+
         quizRepository.deleteById(id);
     }
 
     /**
-     * Delete the all Quizzes by id.
+     * Delete Quizzes by id.
+     * Also removes the quiz ids from the contained questions.
      *
      * @param ids the ids of the Quizzes.
      */
-    public void deleteAll(final List<UUID> ids) {
+    public void deleteByIdIn(final List<UUID> ids) {
         log.debug("Request to delete all Quizzes : {}", ids);
+
+        // remove quiz ids in contained questions
+        List<Quiz> quizzesDb = quizRepository.findByIdIn(ids);
+        Set<Question> questionsToSave = new HashSet<>();
+        quizzesDb.forEach(quiz -> {
+            List<Question> questions = quiz.getQuestions();
+            questions.forEach(o -> o.removeQuizId(quiz.getId()));
+            questionsToSave.addAll(questions);
+        });
+        questionService.saveEntities(questionsToSave.stream().collect(Collectors.toCollection(LinkedList::new)));
+
         quizRepository.deleteByIdIn(ids);
     }
 
@@ -153,17 +189,22 @@ public class QuizService {
      * Delete the Quiz by id.
      *
      * @param id the id of the entity.
-     * @param withQuestions if {@code true} deletes also the contained questions
+     * @param withQuestions if {@code true} deletes also the contained questions, if they are not contained in any other quiz
      */
     public void delete(final UUID id, boolean withQuestions) {
         log.debug("Request to delete Quiz with Questions: {}", id);
-        if (withQuestions) {
-            Optional<Quiz> quiz = quizRepository.findById(id);
-            if (quiz.isPresent()) {
-                List<UUID> questionIds = quiz.get().getQuestions().stream().map(Question::getId).collect(Collectors.toList());
-                questionService.deleteByIdIn(questionIds);
+        Optional<Quiz> quizDbOpt = quizRepository.findById(id);
+        if (quizDbOpt.isPresent()) {
+            Quiz quizDb = quizDbOpt.get();
+            List<Question> questionsDb = quizDb.getQuestions();
+            questionsDb.forEach(o -> o.removeQuizId(quizDb.getId()));
+            if (withQuestions) {
+                List<Question> questionsToDelete = questionsDb.stream().filter(o -> o.getQuizIds().isEmpty()).collect(Collectors.toCollection(LinkedList::new));
+                questionsDb.removeAll(questionsToDelete);
+                questionService.deleteEntities(questionsToDelete);
             }
+            questionService.saveEntities(questionsDb);
         }
-        delete(id);
+        quizRepository.deleteById(id);
     }
 }
