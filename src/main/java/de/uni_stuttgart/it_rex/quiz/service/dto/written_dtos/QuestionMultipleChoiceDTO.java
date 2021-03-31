@@ -3,9 +3,14 @@ package de.uni_stuttgart.it_rex.quiz.service.dto.written_dtos;
 import java.util.Map;
 
 public class QuestionMultipleChoiceDTO extends QuestionDTO {
-
+    /**
+     * Available choices.
+     */
     private Map<Integer, String> choices;
 
+    /**
+     * Contains whether choices are right or wrong.
+     */
     private Map<Integer, Boolean> solution;
 
     public Map<Integer, String> getChoices() {

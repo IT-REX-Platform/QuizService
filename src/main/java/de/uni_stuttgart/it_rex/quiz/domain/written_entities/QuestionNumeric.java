@@ -13,6 +13,9 @@ public class QuestionNumeric extends Question {
 
     private static final long serialVersionUID = 1L;
 
+    /**
+     * The solution.
+     */
     @Field
     private SolutionNumeric solution;
 

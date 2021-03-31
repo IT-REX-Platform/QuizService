@@ -21,15 +21,27 @@ public class Quiz implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /**
+     * The primary key.
+     */
     @Id
     private UUID id;
 
+    /**
+     * The Course Id.
+     */
     @Field
     private UUID courseId;
 
+    /**
+     * The Quiz name.
+     */
     @Field
     private String name;
 
+    /**
+     * List of to the contained questions.
+     */
     @DBRef(lazy = true)
     @Field
     private List<Question> questions = new LinkedList<>();

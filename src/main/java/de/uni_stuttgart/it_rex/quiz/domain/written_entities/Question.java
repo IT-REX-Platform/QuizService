@@ -23,15 +23,27 @@ public class Question implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /**
+     * The primary key.
+     */
     @Id
     private UUID id;
 
+    /**
+     * The Course Id.
+     */
     @Field
     private UUID courseId;
 
+    /**
+     * The text of the Question.
+     */
     @Field
     private String questionText;
 
+    /**
+     * Set of Ids of quizzes in which the question is contained.
+     */
     @Field
     private Set<UUID> quizIds = new HashSet<>();
 

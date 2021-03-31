@@ -3,9 +3,14 @@ package de.uni_stuttgart.it_rex.quiz.service.dto.written_dtos;
 import java.util.Map;
 
 public class QuestionSingleChoiceDTO extends QuestionDTO {
-
+    /**
+     * Available choices.
+     */
     private Map<Integer, String> choices;
 
+    /**
+     * The key to the correct choice.
+     */
     private Integer solution;
 
     public Map<Integer, String> getChoices() {

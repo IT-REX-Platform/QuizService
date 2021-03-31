@@ -3,10 +3,14 @@ package de.uni_stuttgart.it_rex.quiz.service.dto.written_dtos;
 import java.io.Serializable;
 
 public class SolutionNumericDTO implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-
+    /**
+     * The result value.
+     */
     private float result;
+
+    /**
+     * The accepted result range: [result-epsilon, result+epsilon].
+     */
     private float epsilon;
 
     public float getResult() {
