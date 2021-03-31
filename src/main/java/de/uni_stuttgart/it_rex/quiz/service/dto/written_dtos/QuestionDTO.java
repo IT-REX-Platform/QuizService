@@ -28,8 +28,14 @@ public class QuestionDTO implements Serializable {
      */
     private UUID courseId;
 
+    /**
+     * Set of ids of quizzes in which the question is contained.
+     */
     private Set<UUID> quizIds;
 
+    /**
+     * The question text.
+     */
     private String question;
 
     public UUID getId() {

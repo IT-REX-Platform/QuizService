@@ -8,6 +8,9 @@ import org.springframework.stereotype.Component;
 
 import de.uni_stuttgart.it_rex.quiz.domain.written_entities.Question;
 
+/**
+ * Hook for UUID generation before save.
+ */
 @Component
 public class QuestionUuidListener extends AbstractMongoEventListener<Question> {
  

@@ -14,10 +14,14 @@ import java.util.Map;
 public class QuestionMultipleChoice extends Question {
 
     private static final long serialVersionUID = 1L;
-
+    /**
+     * Available choices.
+     */
     @Field
     private Map<Integer, String> choices;
-
+    /**
+     * Contains whether choices are right or wrong.
+     */
     @Field
     private Map<Integer, Boolean> solution;
 

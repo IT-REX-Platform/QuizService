@@ -15,9 +15,15 @@ public class QuestionSingleChoice extends Question {
 
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Available choices.
+     */
     @Field
     private Map<Integer, String> choices;
 
+    /**
+     * The key to the correct choice.
+     */
     @Field
     private Integer solution;
 

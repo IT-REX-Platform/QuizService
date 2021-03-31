@@ -2,7 +2,6 @@ package de.uni_stuttgart.it_rex.quiz.web.rest.written;
 
 import de.uni_stuttgart.it_rex.quiz.QuizServiceApp;
 import de.uni_stuttgart.it_rex.quiz.config.TestSecurityConfiguration;
-import de.uni_stuttgart.it_rex.quiz.domain.enumeration.QUESTIONTYPE;
 import de.uni_stuttgart.it_rex.quiz.domain.written_entities.Question;
 import de.uni_stuttgart.it_rex.quiz.repository.written.QuestionRepository;
 import de.uni_stuttgart.it_rex.quiz.service.written.QuestionService;
@@ -10,7 +9,6 @@ import de.uni_stuttgart.it_rex.quiz.web.rest.TestUtil;
 import de.uni_stuttgart.it_rex.quiz.service.dto.written_dtos.QuestionDTO;
 import de.uni_stuttgart.it_rex.quiz.service.mapper.written.QuestionMapper;
 
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -27,10 +25,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasEntry;
 import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.mockito.Mockito.*;
@@ -47,16 +43,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class QuestionResourceIT {
 
     private static final UUID DEFAULT_COURSEID               = UUID.randomUUID();
-    private static final QUESTIONTYPE DEFAULT_TYPE           = QUESTIONTYPE.SINGLE_CHOICE;
     private static final String DEFAULT_QUESTION             = "Best Number?";
-    private static final Map<String, String> DEFAULT_CHOICES = new HashMap<String, String>() {{ put("0","Pi"); put("1","42"); }};
-    private static final String DEFAULT_SOLUTION             = "1";
 
     private static final UUID UPDATED_COURSEID               = UUID.randomUUID();
-    private static final QUESTIONTYPE UPDATED_TYPE           = QUESTIONTYPE.SINGLE_CHOICE;
     private static final String UPDATED_QUESTION             = "Best Number?";
-    private static final Map<String, String> UPDATED_CHOICES = new HashMap<String, String>() {{ put("0","Pi"); put("1","42"); }};
-    private static final String UPDATED_SOLUTION             = "1";
 
     @Autowired
     private QuestionRepository questionRepository;
