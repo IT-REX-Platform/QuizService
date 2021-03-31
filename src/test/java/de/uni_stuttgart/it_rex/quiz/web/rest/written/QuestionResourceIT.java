@@ -42,11 +42,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WithMockUser
 public class QuestionResourceIT {
 
-    private static final UUID DEFAULT_COURSEID               = UUID.randomUUID();
-    private static final String DEFAULT_QUESTION             = "Best Number?";
+    private static final UUID DEFAULT_COURSEID   = UUID.randomUUID();
+    private static final String DEFAULT_QUESTION = "Best Number?";
 
-    private static final UUID UPDATED_COURSEID               = UUID.randomUUID();
-    private static final String UPDATED_QUESTION             = "Best Number?";
+    private static final UUID UPDATED_COURSEID   = UUID.randomUUID();
+    private static final String UPDATED_QUESTION = "Best Number?";
 
     @Autowired
     private QuestionRepository questionRepository;
