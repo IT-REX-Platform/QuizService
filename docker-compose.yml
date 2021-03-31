@@ -1,0 +1,33 @@
+version: "2"
+services:
+  quizservice:
+    image: quizservice
+    environment:
+      - _JAVA_OPTIONS=-Xmx512m -Xms256m
+      - SPRING_PROFILES_ACTIVE=prod,swagger
+      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$${jhipster.registry.password}@jhipster-registry:8761/eureka
+      - SPRING_CLOUD_CONFIG_URI=http://admin:$${jhipster.registry.password}@jhipster-registry:8761/config
+      - SPRING_DATA_MONGODB_URI=mongodb://quizservice-mongodb:27017
+      - SPRING_DATA_MONGODB_DATABASE=QuizService
+      - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://129.69.217.173:9080/auth/realms/jhipster
+      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=internal
+      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=internal
+      - JHIPSTER_SLEEP=5 # gives time for other services to boot before the application
+    restart: always
+    depends_on:
+      - quizservice-mongodb
+    networks:
+      - it-rex
+
+  quizservice-mongodb:
+    image: mongo:4.2.7
+    restart: always
+    ports:
+      - "27017:27017"
+    networks:
+      - it-rex
+
+networks:
+  it-rex:
+    external: true

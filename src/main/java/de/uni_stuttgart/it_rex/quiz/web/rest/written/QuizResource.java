@@ -2,10 +2,11 @@ package de.uni_stuttgart.it_rex.quiz.web.rest.written;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import de.uni_stuttgart.it_rex.quiz.service.written.QuizService;
 import org.slf4j.Logger;
@@ -116,6 +117,37 @@ public class QuizResource {
     }
 
     /**
+     * {@code GET  /quizzes} : get all the quizzes of a course.
+     *
+     * @param courseId the course id
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of quizzes in body.
+     */
+    @GetMapping(value="/quizzes", params="course_id")
+    public List<QuizDTO> getCourseQuizzes(@RequestParam("course_id") final UUID courseId) {
+        log.debug("REST request to get all Quizzes");
+        return quizService.findByCourseId(courseId);
+    }
+
+    /**
+     * {@code POST  /quizzes/get/ids} : get quizzes by ids.
+     * 
+     * This is actually a {@code GET} request.
+     * The ids need to be in the request body, because the practical URI length limit is around 2000 chars.
+     * With UUIDs this would imply an upper limit of about 50 ids.
+     * {@code POST} is used, because the frontend cannot send a body in a get request.
+     * ¯\_(ツ)_/¯
+     *
+     * @param quizIds the Quiz Ids.
+     * @return the map of quizzes in the body.
+     */
+    @PostMapping(value="/quizzes/get/ids")
+    public Map<UUID, QuizDTO> findAllByIds(@RequestBody final List<UUID> quizIds) {
+        log.info("REST request to get all quizzes by ids: {}", quizIds);
+        final List<QuizDTO> quizzes = quizService.findByIdIn(quizIds);
+        return quizzes.stream().collect(Collectors.toMap(QuizDTO::getId, quiz -> quiz));
+    }
+
+    /**
      * {@code GET  /quizzes/:id} : get the "id" quiz.
      *
      * @param id the id of the QuizDTO to retrieve.
@@ -135,10 +167,13 @@ public class QuizResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/quizzes/{id}")
-    public ResponseEntity<Void> deletequiz(@PathVariable final UUID id) {
+    public ResponseEntity<Void> deleteQuiz(@PathVariable final UUID id,
+            @RequestParam(value = "with_questions", required = false, defaultValue = "false") final boolean withQuestions) {
         log.debug("REST request to delete quiz : {}", id);
-        quizService.delete(id);
-        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
+        quizService.delete(id, withQuestions);
+        return ResponseEntity.noContent()
+                .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
+                .build();
     }
 
 }

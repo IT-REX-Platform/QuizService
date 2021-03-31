@@ -9,35 +9,16 @@ pipeline {
     agent { label agentLabel }
 
     stages {
-        stage('check java') {
-            steps {
-                sh 'java -version'
-            }
-        }
-
         stage('clean') {
             steps { sh 'chmod +x gradlew'
                 sh './gradlew clean --no-daemon'
             }
         }
 
-        stage('nohttp') {
-            steps {
-                sh './gradlew checkstyleNohttp --no-daemon'
-            }
-        }
-
-        stage('backend tests') {
+        stage('tests') {
             steps {
                 sh './gradlew check jacocoTestReport -PnodeInstall --no-daemon'
                 junit '**/build/**/TEST-*.xml'
-            }
-        }
-
-        stage('packaging') {
-            steps {
-                sh './gradlew bootJar -x test -Pprod -PnodeInstall --no-daemon'
-                archiveArtifacts artifacts: '**/build/libs/*.jar', fingerprint: true
             }
         }
 
@@ -65,21 +46,9 @@ pipeline {
             }
             steps {
                 echo 'Deploying....'
-                sh './gradlew jibBuildTar'
-                sh 'mkdir -p /srv/Backend/quizservice'
-                sh 'rm -rf /srv/Backend/quizservice/*'
-                sh 'cd ./build && mv jib-image.tar /srv/Backend/quizservice/quizservice.tar'
-                sh 'touch /srv/Backend/quizservice/deploy'
-            }
-        }
-
-        stage('release') {
-            when { allOf { branch 'dev'; triggeredBy 'UserIdCause' } }
-            steps {
-                sshagent (credentials: ['jenkins']) {
-                    echo 'Pushing dev to main'
-                    sh 'git push git@github.com:IT-REX-Platform/QuizService.git dev:main'
-                }
+                sh './gradlew jibDockerBuild'
+                sh 'docker-compose rm -svf quizservice'
+                sh 'docker-compose up -d --build --remove-orphans'
             }
         }
     }

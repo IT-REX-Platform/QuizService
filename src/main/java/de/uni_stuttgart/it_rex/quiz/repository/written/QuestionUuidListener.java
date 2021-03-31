@@ -6,17 +6,17 @@ import org.springframework.data.mongodb.core.mapping.event.AbstractMongoEventLis
 import org.springframework.data.mongodb.core.mapping.event.BeforeConvertEvent;
 import org.springframework.stereotype.Component;
 
-import de.uni_stuttgart.it_rex.quiz.domain.written_entities.Quiz;
+import de.uni_stuttgart.it_rex.quiz.domain.written_entities.Question;
 
 /**
  * Hook for UUID generation before save.
  */
 @Component
-public class QuizUuidListener extends AbstractMongoEventListener<Quiz> {
+public class QuestionUuidListener extends AbstractMongoEventListener<Question> {
  
     @Override
-    public void onBeforeConvert(BeforeConvertEvent<Quiz> event) {
-        Quiz quiz = event.getSource();
+    public void onBeforeConvert(BeforeConvertEvent<Question> event) {
+        Question quiz = event.getSource();
         if (quiz.isNew()) {
             quiz.setId(UUID.randomUUID());
         }

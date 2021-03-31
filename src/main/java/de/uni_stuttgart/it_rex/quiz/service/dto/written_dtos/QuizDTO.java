@@ -1,7 +1,6 @@
 package de.uni_stuttgart.it_rex.quiz.service.dto.written_dtos;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -57,5 +56,28 @@ public class QuizDTO implements Serializable {
 
     public void setQuestions(List<QuestionDTO> questions) {
         this.questions = questions;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        QuizDTO quizDTO = (QuizDTO) o;
+        return Objects.equals(getId(), quizDTO.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
+    }
+
+    @Override
+    public String toString() {
+        return "QuizDTO{" +
+            "id=" + id +
+            ", name='" + name + '\'' +
+            ", courseId=" + courseId +
+            ", questions=" + questions +
+            '}';
     }
 }
